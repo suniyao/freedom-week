@@ -13,7 +13,7 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (c - b)/a;
 
-        return {equation: `${a}x + ${b} = ${c}`, x}
+        return {equation: `${a}x + ${b} = ${c}`, solution: {x}}
     } else if (difficulty === "medium") {
         // form of ax + b = c, solve for x (a can be negative)
         const a = RandomInt(-10, 10)
@@ -22,7 +22,7 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (c - b) / a;
 
-        return {equation: `${a}x ${formatTerm(b)} = ${c}`, x}
+        return {equation: `${a}x ${formatTerm(b)} = ${c}`, solution:{x}}
     } else {
         // form of ax + b = cx + d, solve for x
         const a = RandomInt(-10, 10, true)
@@ -32,6 +32,6 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (a - c)/(d - b)
 
-        return {equation: `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`, x}
+        return {equation: `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`, solution:{x}}
     }
 }

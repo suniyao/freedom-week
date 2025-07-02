@@ -1,10 +1,10 @@
 "use server";
 
-import {DifficultyRanking} from "@/app/types";
+import {DifficultyRanking, EquationResult} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateQuadraticVertexQuestion(difficulty: DifficultyRanking) {
+export default async function generateQuadraticVertexQuestion(difficulty: DifficultyRanking): Promise<EquationResult> {
     //basically find the vertex based on an arbitrary quadratic function
     if (difficulty === "easy") {
         //vertex form f(x) = a(x-h)^2 + c
