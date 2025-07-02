@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function signIn(){
   return (
     <main className="flex min-h-screen items-center justify-center bg-amber-100 px-4">
@@ -10,7 +12,7 @@ export default function signIn(){
             <input
               type="email"
               placeholder="you@example.com"
-              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200 placeholder-gray-300 text-gray-800"
             />
           </div>
 
@@ -19,13 +21,13 @@ export default function signIn(){
             <input
               type="password"
               placeholder="••••••••"
-              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200 placeholder-gray-300 text-gray-800"
             />
           </div>
 
           <div className="flex justify-between text-sm text-amber-500">
             <a href="#" className="hover:underline">Forgot password?</a>
-            <a href="#" className="hover:underline">Create account</a>
+            <Link href={"/sign-up"} className="hover:underline">Create account</Link>
           </div>
 
           <button

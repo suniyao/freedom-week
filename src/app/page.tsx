@@ -24,9 +24,9 @@ export default function HomePage() {
                 <div className={"p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline"}>
                     learn
                 </div>
-                <div className={"p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline"}>
+                <Link href={"/rankings"} className={"p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline"}>
                     rankings
-                </div>
+                </Link>
             </div>
         </div>
     )
