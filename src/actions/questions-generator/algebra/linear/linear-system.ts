@@ -2,6 +2,7 @@
 
 import {DifficultyRanking, SystemResult} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
+import formatTerm from "@/actions/reusable-utils/format-term";
 
 export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<SystemResult> {
     if (difficulty === "easy") {
@@ -22,7 +23,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
 
         return {
             equation_1: `y = ${a}x + ${b}`,
-            equation_2: `y = ${c}x + ${d}`,
+            equation_2: `y = ${formatTerm(c, "x")} + ${d}`,
             solution: { x, y }
         }
     } else if (difficulty === "medium") {
@@ -48,7 +49,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
 
         return {
             equation_1: `${a}x + y = ${b}`,
-            equation_2: `${c}x + ${d}y = ${e}`,
+            equation_2: `${c}x ${formatTerm(d, "y")} = ${e}`,
             solution: { x, y }
         }
     } else {
@@ -56,15 +57,6 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         // ax + by = c
         // dx + ey = f
         //negatives allowed
-
-        /*
-        const a = RandomInt(-10, 10, true)
-        const b = RandomInt(-10, 10, true)
-        const c = RandomInt(-30, 30)
-        const d = RandomInt(-10, 10, true)
-        const e = RandomInt(-10, 10, true)
-        const f = RandomInt(-30, 30)
-         */
 
         let det
         let a,b,d,e
@@ -99,8 +91,8 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         }
 
         return {
-            equation_1: `${a}x + ${b}y = ${c}`,
-            equation_2: `${d}x + ${e}y = ${f}`,
+            equation_1: `${a}x ${formatTerm(b, "y")} = ${c}`,
+            equation_2: `${d}x ${formatTerm(e, "y")} = ${f}`,
             solution: {x, y}
         }
     }

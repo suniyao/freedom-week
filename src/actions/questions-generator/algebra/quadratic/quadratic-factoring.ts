@@ -2,13 +2,14 @@
 
 import {DifficultyRanking, FactoringResult} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
+import formatTerm from "@/actions/reusable-utils/format-term";
 
 export default async function generateQuadraticFactoringQuestion(difficulty: DifficultyRanking): Promise<FactoringResult> {
     if (difficulty === "easy") {
         // (x+a)(x+b) = x^2 + ax + bx + ab
         const a: number = RandomInt(0, 5)
         const b: number = RandomInt(0, 5)
-        const equation: string = `x^2 + ${a + b}x + ${a * b}`
+        const equation: string = `x^2 ${formatTerm(a + b, "x")} ${formatTerm(a * b)}`
         const factors = [`(x+${a})`, `(x+${b})`]
 
         return {equation, factors}
@@ -18,8 +19,8 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         const b: number = RandomInt(-10, 10, true)
         const c: number = RandomInt(-10, 10, true)
         const d = RandomInt(-10, 10, true)
-        const equation: string = `${a*c}x^2 + ${a*d + b*c}x + ${b*d}`
-        const factors = [`(${a}x+${b})`, `${c}x+${d}`]
+        const equation: string = `${a*c}x^2 ${formatTerm(a*d + b*c, "x")} ${formatTerm(b*d)}`
+        const factors = [`(${a}x ${formatTerm(b)})`, `(${c}x ${formatTerm(d)})`]
 
         return {equation, factors}
     } else {
@@ -30,7 +31,7 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         const d: number = RandomInt(-10, 10, true)
         const k: number = RandomInt(-10, 10, true)
         const equation: string = `${k * a * c}x^2 + ${k * (a*d + b*c)}x + ${k * (b * d)}`
-        const factors = [`${k}`, `${a}x+${b}`, `${c}x+${d}`]
+        const factors = [`${k}`, `${a}x ${formatTerm(b)}`, `${c}x ${formatTerm(d)}`]
         return {equation, factors}
     }
 }
