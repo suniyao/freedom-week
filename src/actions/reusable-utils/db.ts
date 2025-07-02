@@ -7,7 +7,6 @@
 //AS THE MADNESS OF THE SYSTEM GROWS
 
 import {PrismaClient} from "@prisma/client";
-import {cookies} from "next/headers";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
