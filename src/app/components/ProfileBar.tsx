@@ -28,6 +28,8 @@ export default function ProfileBar() {
               src={user.image || "/assets/default-pfp.png"}
               alt="pfp"
               className="h-8 w-8 rounded-full"
+              width={32}
+              height={32}
             />
             <span className="text-lg font-semibold">{user.name}</span>
           </div>
@@ -38,14 +40,13 @@ export default function ProfileBar() {
         </div>
       )}
 
-      {/* ✅ Dropdown */}
       {dropdownOpen && (
-        <div className="absolute right-12 top-28 z-50 w-48 bg-white rounded-md shadow-lg border text-black">
-          <ul className="py-2 text-sm">
+        <div className="absolute right-14 top-32 z-50 w-48 bg-amber-50 rounded-md shadow-lg text-black">
+          <ul className="text-sm">
             <li>
               <Link
                 href="/settings"
-                className="block px-4 py-2 hover:bg-amber-100"
+                className="block px-4 py-4 hover:bg-amber-100"
                 onClick={() => setDropdownOpen(false)}
               >
                 Settings
@@ -54,7 +55,7 @@ export default function ProfileBar() {
             <li>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 hover:bg-amber-100"
+                className="block w-full text-left px-4 py-4 hover:bg-amber-100"
               >
                 Log out
               </button>
