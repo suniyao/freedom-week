@@ -11,7 +11,7 @@ export default function HomePage() {
                 </div>
                 <div
                     className={"text-2xl p-4 m-10 bg-stone-900 text-amber-100 rounded-xl text-center items-center flex hover:cursor-pointer hover:bg-amber-400 hover:p-5 hover:m-9 transition-all"}>
-                    <Link href={"/signin"}>sign in</Link>
+                    <Link href={"/sign-in"}>sign in</Link>
                 </div>
             </div>
             <div className={"w-full h-full justify-center text-3xl items-end pr-24 flex flex-col gap-5"}>
