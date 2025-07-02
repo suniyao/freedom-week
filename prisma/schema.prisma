@@ -3,8 +3,8 @@ model User {
   username            String        @unique @db.VarChar(64)
   email               String        @unique @db.VarChar(64)
   password            String        @unique //hashed
-  profile_picture_url String
-  bio                 String
+  profile_picture_url String?
+  bio                 String?
   stats               UserStats?
   settings            UserSettings?
   userStatsUser_id    String
