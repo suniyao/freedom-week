@@ -1,20 +1,17 @@
 "use server";
 
-import {DifficultyRanking} from "@/app/types";
+import {DifficultyRanking, FactoringResult} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 
-export default async function generateQuadraticFactoringQuestion(difficulty: DifficultyRanking) {
-
-
-    // stuff like that
-
+export default async function generateQuadraticFactoringQuestion(difficulty: DifficultyRanking): Promise<FactoringResult> {
     if (difficulty === "easy") {
         // (x+a)(x+b) = x^2 + ax + bx + ab
         const a: number = RandomInt(0, 5)
         const b: number = RandomInt(0, 5)
         const equation: string = `x^2 + ${a + b}x + ${a * b}`
+        const factors = [`(x+${a})`, `(x+${b})`]
 
-        return {equation}
+        return {equation, factors}
     } else if (difficulty === "medium") {
         // (ax+b)(cx+d) = acx^2 + adx + bcx + bd
         const a: number = RandomInt(-10, 10, true)
@@ -22,8 +19,9 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         const c: number = RandomInt(-10, 10, true)
         const d = RandomInt(-10, 10, true)
         const equation: string = `${a*c}x^2 + ${a*d + b*c}x + ${b*d}`
+        const factors = [`(${a}x+${b})`, `${c}x+${d}`]
 
-        return {equation}
+        return {equation, factors}
     } else {
         // k(ax+b)(cx+d) = k(acx^2 + adx + bcx + bd)
         const a: number = RandomInt(-10, 10, true)
@@ -32,6 +30,7 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         const d: number = RandomInt(-10, 10, true)
         const k: number = RandomInt(-10, 10, true)
         const equation: string = `${k * a * c}x^2 + ${k * (a*d + b*c)}x + ${k * (b * d)}`
-        return {equation}
+        const factors = [`${k}`, `${a}x+${b}`, `${c}x+${d}`]
+        return {equation, factors}
     }
 }
