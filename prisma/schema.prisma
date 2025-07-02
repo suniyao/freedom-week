@@ -7,18 +7,35 @@ model User {
   bio                 String?
   stats               UserStats?
   settings            UserSettings?
-  userStatsUser_id    String
-  userSettingsUser_id String
 }
 
 model UserStats {
-  user_id String @id
-  user    User   @relation(fields: [user_id], references: [id])
+  user_id  String    @id
+  user     User      @relation(fields: [user_id], references: [id])
+  sessions Session[]
 }
 
 model UserSettings {
   user_id String @id
   user    User   @relation(fields: [user_id], references: [id])
+}
+
+model Session {
+  id                       String         @id @unique @default(cuid())
+  owner                    UserStats      @relation(fields: [owner_id], references: [user_id])
+  owner_id                 String
+  questions                QuestionData[]
+  ranked                   Boolean
+  total_milliseconds_spent Int
+}
+
+model QuestionData {
+  id                 String  @id @unique @default(cuid())
+  session            Session @relation(fields: [session_id], references: [id])
+  session_id         String
+  type               String
+  milliseconds_spent Int
+  correct            Boolean
 }
 
 datasource db {
