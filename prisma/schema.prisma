@@ -1,0 +1,31 @@
+model User {
+  id                  String        @id @unique @default(cuid())
+  username            String        @unique @db.VarChar(64)
+  email               String        @unique @db.VarChar(64)
+  password            String        @unique //hashed
+  profile_picture_url String
+  bio                 String
+  stats               UserStats?
+  settings            UserSettings?
+  userStatsUser_id    String
+  userSettingsUser_id String
+}
+
+model UserStats {
+  user_id String @id
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+model UserSettings {
+  user_id String @id
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
