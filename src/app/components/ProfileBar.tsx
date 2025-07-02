@@ -2,13 +2,15 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 export default function ProfileBar() {
   const { data: session } = useSession();
   const user = session?.user;
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
+  const hasShownLoginMessage = useRef(false);
 
   const handleToggle = () => setDropdownOpen(prev => !prev);
   const handleLogout = async () => {
@@ -16,8 +18,21 @@ export default function ProfileBar() {
     setDropdownOpen(false);
   };
 
+  useEffect(() => {
+    if (session?.user && !hasShownLoginMessage.current) {
+      setShowBanner(true);
+      hasShownLoginMessage.current=true;
+    }
+  }, [user]);
+
   return (
     <div className="p-4 relative">
+      {showBanner && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-emerald-500 text-white rounded-lg shadow-lg animate-slide-fade">
+          ✅ Successfully logged in!
+        </div>
+      )}
+
       {user ? (
         <div
           className="text-2xl p-4 m-10 bg-amber-200 rounded-xl text-center flex items-center justify-center hover:cursor-pointer hover:bg-black hover:p-5 hover:m-9 hover:text-amber-100 transition-all"

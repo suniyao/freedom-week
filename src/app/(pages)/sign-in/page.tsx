@@ -11,13 +11,11 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setSuccessMessage("");
 
     const res = await signIn("credentials", {
       email,
@@ -26,7 +24,6 @@ export default function SignIn() {
     });
 
     if (res?.ok) {
-      setSuccessMessage("🎉 Signed in successfully!");
       setEmail("");
       setPassword("");
       setLoading(false);
@@ -41,12 +38,6 @@ export default function SignIn() {
     <main className="flex min-h-screen items-center justify-center bg-amber-100 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Sign In</h2>
-
-        {successMessage && (
-          <div className="mb-4 rounded-md bg-green-100 px-4 py-2 text-sm text-green-700">
-            {successMessage}
-          </div>
-        )}
 
         {error && (
           <div className="mb-4 rounded-md bg-red-100 px-4 py-2 text-sm text-red-700">

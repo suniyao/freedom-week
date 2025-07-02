@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import ProfileBar from "./components/ProfileBar";
-import { SessionProvider } from "next-auth/react";
 
 export default function HomePage() {
     return (
@@ -11,7 +10,7 @@ export default function HomePage() {
                 <div className={"text-9xl p-12 m-10 animate-bounce select-none"}>
                     mathkitten
                 </div>
-                <SessionProvider><ProfileBar /></SessionProvider>
+                <ProfileBar />
             </div>
             <div className={"w-full h-full justify-center text-3xl items-end pr-24 flex flex-col gap-5"}>
                 <div className={"p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline"}>
