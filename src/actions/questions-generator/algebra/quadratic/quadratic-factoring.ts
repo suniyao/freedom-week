@@ -15,8 +15,8 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
 
         return {equation}
     } else if (difficulty === "medium") {
-        const a: number = RandomInt(-10, 10)
-        const b: number = RandomInt(-10, 10)
+        const a: number = RandomInt(-10, 10, true)
+        const b: number = RandomInt(-10, 10, true)
         const equation: string = `x^2 + ${a + b}x + ${a * b}`
 
         return {equation}

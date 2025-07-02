@@ -24,10 +24,10 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
         return {equation: `${a}x + ${b} = ${c}`, x}
     } else {
         // form of ax + b = cx + d, solve for x
-        const a = RandomInt(-10, 10)
-        const b = RandomInt(-10, 10)
-        const c = RandomInt(-10, 10)
-        const d = RandomInt(-30, 30)
+        const a = RandomInt(-10, 10, true)
+        const b = RandomInt(-10, 10, true)
+        const c = RandomInt(-10, 10, true)
+        const d = RandomInt(-30, 30, true)
 
         const x = (a - c)/(d - b)
 
