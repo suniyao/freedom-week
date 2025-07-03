@@ -31,7 +31,7 @@ const handler = NextAuth({
           id: user.id,
           email: user.email,
           name: user.username,
-          image: user.profile_picture_url ?? null
+          image: user.profile_picture_url ?? undefined
         };
       }
     })

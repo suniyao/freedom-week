@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -23,19 +23,32 @@ export async function POST(req: Request) {
   // Create stats/settings first
   // await prisma.userStats.create({ data: { user_id: userId } });
   // await prisma.userSettings.create({ data: { user_id: userId } });
-
-  const user = await prisma.user.create({
-    data: {
-      id: userId,
-      email,
-      username,
-      password: hashedPassword,
-      profile_picture_url: "",
-      bio: "",
-      userStatsUser_id: userId,
-      userSettingsUser_id: userId
-    }
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        id: userId,
+        email,
+        username,
+        password: hashedPassword,
+        profile_picture_url: "",
+        bio: "",
+      }
+    });
 
   return NextResponse.json({ id: user.id, username: user.username }, { status: 201 });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      const target = (err.meta?.target as string[]) || [];
+      if (target.includes("username")) {
+        return NextResponse.json({ error: "Username already taken. Please choose another." }, { status: 400 });
+      } else if (target.includes("email")) {
+        return NextResponse.json({ error: "Email already registered." }, { status: 400 });
+      } else {
+        return NextResponse.json({ error: "A unique field already exists." }, { status: 400 });
+      }
+    }
+
+    console.error("Signup error", err);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
