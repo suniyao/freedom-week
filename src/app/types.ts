@@ -9,3 +9,18 @@ export interface Question {
     question: string,
     solution: string | string[] | {x: number, y?: number}
 }
+
+export interface QuestionSession {
+    id: string
+    owner_id: string,
+    questions: QuestionAttemptData[],
+    ranked: boolean,
+    total_milliseconds_spent: number
+}
+
+export interface QuestionAttemptData {
+    id?: string,
+    type: string
+    milliseconds_spent: number
+    correct: boolean
+}
