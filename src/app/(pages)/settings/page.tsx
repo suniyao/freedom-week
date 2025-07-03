@@ -38,59 +38,94 @@ export default function Settings() {
   const [status, setStatus] = useState("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    setSelectedFile(file);
-    const preview = URL.createObjectURL(file);
-    setPreviewUrl(preview);
-  }
+  setSelectedFile(file);
+  const preview = URL.createObjectURL(file);
+  setPreviewUrl(preview); // Just preview!
+};
 
-  const handleSave = async () => {
-    if (!session?.user?.id) return;
+  const handleUpload = async () => {
+    if (!selectedFile || !session?.user?.id) return;
 
-    let uploadedImageUrl = previewUrl;
-    const updates: Record<string, any> = { userId: session.user.id };
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("userId", session.user.id);
 
-    if (selectedFile) {
-      const fileExt = selectedFile.name.split(".").pop();
-      const filePath = `pfps/${session.user.id}-${Date.now()}.${fileExt}`;
-      const { error: uploadError } = await supabase.storage
-        .from("pfp")
-        .upload(filePath, selectedFile, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (uploadError) {
-        console.error("Upload error:", uploadError.message);
-        setStatus("Failed to upload image");
-        return;
-      }
-
-      const { data } = supabase.storage.from("pfp").getPublicUrl(filePath);
-      uploadedImageUrl = data.publicUrl;
-      updates.profile_picture_url = uploadedImageUrl;
-    }
-
-    if (bio !== originalData.bio) updates.bio = bio;
-    if (email !== originalData.email) updates.email = email;
-    if (username !== originalData.username) updates.username = username;
-
-    const res = await fetch("/api/settings/update", {
+    const res = await fetch("/api/settings/upload-image", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updates),
+      body: formData,
     });
 
+    const data = await res.json();
+
     if (res.ok) {
-      setStatus("saved!");
-      setOriginalData({ ...originalData, ...updates }); // update local original copy
+      setPreviewUrl(data.url); // ✅ Step 7: Show image
     } else {
-      const err = await res.json();
-      setStatus(`Error: ${err.error}`);
+      setStatus(`Upload error: ${data.error}`);
     }
   };
+
+
+const handleSave = async () => {
+  if (!session?.user?.id) return;
+
+  const updates: Record<string, any> = { userId: session.user.id };
+  let uploadedImageUrl = previewUrl;
+
+  // 👇 Upload image if a new one was selected
+  if (selectedFile) {
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("userId", session.user.id);
+
+    const res = await fetch("/api/settings/upload-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      uploadedImageUrl = result.url;
+      updates.profile_picture_url = uploadedImageUrl;
+    } else {
+      setStatus(`Upload error: ${result.error}`);
+      return;
+    }
+  }
+
+  // 👇 Only send changed fields
+  if (bio !== originalData.bio) updates.bio = bio;
+  if (email !== originalData.email) updates.email = email;
+  if (username !== originalData.username) updates.username = username;
+
+  // 👇 Only proceed if there's something to update
+  if (Object.keys(updates).length <= 1) {
+    setStatus("No changes to save.");
+    return;
+  }
+
+  const res = await fetch("/api/settings/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    setStatus("Saved!");
+    setOriginalData(prev => ({
+      ...prev,
+      ...updates,
+      profile_picture_url: uploadedImageUrl || prev.profile_picture_url,
+    }));
+  } else {
+    setStatus(`Error: ${data.error}`);
+  }
+};
+
+
   return (
     <main className="min-h-screen px-6 py-12 bg-amber-50 text-stone-800">
       <div className="max-w-3xl mx-auto space-y-10">
