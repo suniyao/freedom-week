@@ -3,6 +3,7 @@
 import React, {useRef, useState} from "react";
 import Image from "next/image";
 import {DatabaseUser} from "@/app/types";
+import {useRouter} from "next/navigation";
 
 type SettingsPageProps = {
     user: DatabaseUser
@@ -18,6 +19,7 @@ export default function SettingsPage(props: SettingsPageProps) {
         profile_picture_url: "",
     })
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     /*
     useEffect(() => {
@@ -189,13 +191,22 @@ export default function SettingsPage(props: SettingsPageProps) {
 
                 {/* Save Button */}
                 <div className="text-center">
-                    <button
-                        onClick={handleSave}
-                        className="px-6 py-3 bg-black text-white rounded-lg hover:bg-amber-400 hover:text-black disabled:bg-gray-300 hover:cursor-pointer hover:disabled:cursor-not-allowed transition-all"
-                        disabled={loading}
-                    >
-                        Save Changes
-                    </button>
+                    <div className={"flex flex-row gap-5"}>
+                        <button
+                            onClick={handleSave}
+                            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-amber-400 hover:text-black disabled:bg-gray-300 hover:cursor-pointer hover:disabled:cursor-not-allowed transition-all"
+                            disabled={loading}
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            onClick={() => router.push("/")}
+                            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-amber-400 hover:text-black disabled:bg-gray-300 hover:cursor-pointer hover:disabled:cursor-not-allowed transition-all"
+                            disabled={loading}>
+                            Back to Home
+                        </button>
+                    </div>
+
                     <p className="mt-2 text-green-600">{status}</p>
                 </div>
             </div>
