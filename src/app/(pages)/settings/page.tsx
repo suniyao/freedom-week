@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { useSession } from "next-auth/react";
-import { supabase } from "@/app/utils/supabaseClient";
+import { useSession, signIn } from "next-auth/react";
 import { useEffect } from "react";
+import { redirect } from "next/dist/server/api-utils";
 
 export default function Settings() {
   const { data: session } = useSession();
@@ -46,35 +46,13 @@ export default function Settings() {
   setPreviewUrl(preview); // Just preview!
 };
 
-  const handleUpload = async () => {
-    if (!selectedFile || !session?.user?.id) return;
-
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("userId", session.user.id);
-
-    const res = await fetch("/api/settings/upload-image", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setPreviewUrl(data.url); // ✅ Step 7: Show image
-    } else {
-      setStatus(`Upload error: ${data.error}`);
-    }
-  };
-
-
 const handleSave = async () => {
   if (!session?.user?.id) return;
 
   const updates: Record<string, any> = { userId: session.user.id };
   let uploadedImageUrl = previewUrl;
 
-  // 👇 Upload image if a new one was selected
+  // Upload image if a new one was selected
   if (selectedFile) {
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -94,8 +72,8 @@ const handleSave = async () => {
       return;
     }
   }
-
-  // 👇 Only send changed fields
+  
+  // Only send changed fields
   if (bio !== originalData.bio) updates.bio = bio;
   if (email !== originalData.email) updates.email = email;
   if (username !== originalData.username) updates.username = username;
@@ -120,6 +98,12 @@ const handleSave = async () => {
       ...updates,
       profile_picture_url: uploadedImageUrl || prev.profile_picture_url,
     }));
+    await signIn("credentials", {
+      redirect: true,
+      email: email || session.user.email,
+      password: "<user's password>"
+    });
+    window.location.reload();
   } else {
     setStatus(`Error: ${data.error}`);
   }
@@ -158,12 +142,14 @@ const handleSave = async () => {
               type="text"
               placeholder="Your name"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <label className="block text-sm font-medium mt-4">Bio</label>
             <textarea
               placeholder="Write something about yourself"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
+              onChange={(e) => setBio(e.target.value)}
             />
           </div>
         </section>
@@ -177,6 +163,7 @@ const handleSave = async () => {
               type="email"
               placeholder="your@email.com"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <label className="block text-sm font-medium mt-4">Change Password</label>

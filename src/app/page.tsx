@@ -5,6 +5,8 @@ import Image from "next/image";
 import ProfileBar from "./components/ProfileBar";
 
 export default function HomePage() {
+
+    
   return (
     <div className="relative h-dvh w-full flex flex-col bg-amber-100 text-stone-900">
       <div className="flex flex-row h-[20dvh] w-full justify-between">
