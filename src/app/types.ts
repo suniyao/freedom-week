@@ -24,3 +24,15 @@ export interface QuestionAttemptData {
     milliseconds_spent: number
     correct: boolean
 }
+
+export type PublicUser = {
+    id: string,
+    username: string,
+    profile_picture_url: string,
+    bio: string,
+}
+
+export type DatabaseUser = PublicUser & {
+    email: string,
+    password: string
+}
