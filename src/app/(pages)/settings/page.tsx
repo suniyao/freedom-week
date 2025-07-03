@@ -4,9 +4,31 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { supabase } from "@/app/utils/supabaseClient";
+import { useEffect } from "react";
 
 export default function Settings() {
   const { data: session } = useSession();
+  const [originalData, setOriginalData] = useState({
+    bio: "",
+    email: "",
+    username: "",
+    profile_picture_url: "",
+  })
+
+  useEffect(() => {
+  if (!session?.user?.id) return;
+  const fetchUserData = async () => {
+    const res = await fetch(`/api/settings/get?userId=${session.user.id}`);
+    const data = await res.json();
+    setBio(data.bio || "");
+    setEmail(data.email || "");
+    setUsername(data.username || "");
+    setPreviewUrl(data.profile_picture_url || "");
+    setOriginalData(data); // Store the original values
+  };
+  fetchUserData();
+}, [session]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -28,49 +50,47 @@ export default function Settings() {
     if (!session?.user?.id) return;
 
     let uploadedImageUrl = previewUrl;
+    const updates: Record<string, any> = { userId: session.user.id };
 
     if (selectedFile) {
       const fileExt = selectedFile.name.split(".").pop();
       const filePath = `pfps/${session.user.id}-${Date.now()}.${fileExt}`;
-
-      const {error: uploadError} = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("pfp")
         .upload(filePath, selectedFile, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+          cacheControl: "3600",
+          upsert: true,
+        });
 
       if (uploadError) {
-      console.error("Upload error:", uploadError.message);
-      setStatus("Failed to upload image");
-      return;
+        console.error("Upload error:", uploadError.message);
+        setStatus("Failed to upload image");
+        return;
       }
 
       const { data } = supabase.storage.from("pfp").getPublicUrl(filePath);
       uploadedImageUrl = data.publicUrl;
+      updates.profile_picture_url = uploadedImageUrl;
     }
+
+    if (bio !== originalData.bio) updates.bio = bio;
+    if (email !== originalData.email) updates.email = email;
+    if (username !== originalData.username) updates.username = username;
 
     const res = await fetch("/api/settings/update", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: session.user.id,
-        bio,
-        email,
-        username,
-        profile_picture_url: uploadedImageUrl,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
     });
 
     if (res.ok) {
       setStatus("saved!");
+      setOriginalData({ ...originalData, ...updates }); // update local original copy
     } else {
       const err = await res.json();
       setStatus(`Error: ${err.error}`);
     }
-  }
+  };
   return (
     <main className="min-h-screen px-6 py-12 bg-amber-50 text-stone-800">
       <div className="max-w-3xl mx-auto space-y-10">

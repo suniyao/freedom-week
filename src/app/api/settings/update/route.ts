@@ -1,29 +1,27 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
+  const data = await req.json();
+  const { userId, bio, email, username, profile_picture_url } = data;
+
+  if (!userId) {
+    return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+  }
+
   try {
-    const {userId, bio, email, username, profile_picture_url} = await req.json();
-
-    if (!userId) {
-      return NextResponse.json({ error: "missing user ID" }, {status: 400});
-    }
-
-    const updateUser = await prisma.user.update({
-      where: {id: userId},
+    const updated = await prisma.user.update({
+      where: { id: userId },
       data: {
-        bio, 
-        email, 
-        username, 
-        profile_picture_url,
+        ...(bio && { bio }),
+        ...(email && { email }),
+        ...(username && { username }),
+        ...(profile_picture_url && { profile_picture_url }),
       },
     });
 
-    return NextResponse.json({ message: "User updated", user: updateUser });
+    return NextResponse.json({ success: true, user: updated });
   } catch (err: any) {
-    console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
