@@ -3,10 +3,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import ProfileBar from "./components/ProfileBar";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function HomePage() {
+    const {data:session} = useSession();
 
-    
+    useEffect(() => {
+        if (session?.user) {
+            signIn("credentials", {
+                redirect: false,
+                email: session.user.email,
+          });
+        }
+    }, [session])
+
   return (
     <div className="relative h-dvh w-full flex flex-col bg-amber-100 text-stone-900">
       <div className="flex flex-row h-[20dvh] w-full justify-between">

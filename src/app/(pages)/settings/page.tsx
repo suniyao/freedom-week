@@ -5,8 +5,10 @@ import React, { useRef, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useEffect } from "react";
 import { redirect } from "next/dist/server/api-utils";
+import { useUserData } from "@/app/context/UserContext";
 
 export default function Settings() {
+  const { setUserData } = useUserData(); 
   const { data: session } = useSession();
   const [originalData, setOriginalData] = useState({
     bio: "",
@@ -91,6 +93,7 @@ const handleSave = async () => {
   });
 
   const data = await res.json();
+
   if (res.ok) {
     setStatus("Saved!");
     setOriginalData(prev => ({
@@ -104,6 +107,9 @@ const handleSave = async () => {
       password: "<user's password>"
     });
     window.location.reload();
+    const updatedUser = await res.json();
+    setUserData(updatedUser.user)
+    
   } else {
     setStatus(`Error: ${data.error}`);
   }
@@ -143,6 +149,7 @@ const handleSave = async () => {
               placeholder="Your name"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
               onChange={(e) => setUsername(e.target.value)}
+              value={username}
             />
 
             <label className="block text-sm font-medium mt-4">Bio</label>
@@ -150,6 +157,7 @@ const handleSave = async () => {
               placeholder="Write something about yourself"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
               onChange={(e) => setBio(e.target.value)}
+              value={bio}
             />
           </div>
         </section>
@@ -164,6 +172,7 @@ const handleSave = async () => {
               placeholder="your@email.com"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
               onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
 
             <label className="block text-sm font-medium mt-4">Change Password</label>
