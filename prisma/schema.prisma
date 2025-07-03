@@ -1,18 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model User {
   id                  String        @id @unique @default(cuid())
   username            String        @unique @db.VarChar(64)
   email               String        @unique @db.VarChar(64)
-  password            String        @unique //hashed
+  password            String        @unique
   profile_picture_url String?
   bio                 String?
-  stats               UserStats?
   settings            UserSettings?
+  stats               UserStats?
 }
 
 model UserStats {
   user_id  String    @id
-  user     User      @relation(fields: [user_id], references: [id])
   sessions Session[]
+  user     User      @relation(fields: [user_id], references: [id])
 }
 
 model UserSettings {
@@ -22,27 +31,18 @@ model UserSettings {
 
 model Session {
   id                       String         @id @unique @default(cuid())
-  owner                    UserStats      @relation(fields: [owner_id], references: [user_id])
   owner_id                 String
-  questions                QuestionData[]
   ranked                   Boolean
   total_milliseconds_spent Int
+  questions                QuestionData[]
+  owner                    UserStats      @relation(fields: [owner_id], references: [user_id])
 }
 
 model QuestionData {
   id                 String  @id @unique @default(cuid())
-  session            Session @relation(fields: [session_id], references: [id])
   session_id         String
   type               String
   milliseconds_spent Int
   correct            Boolean
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
+  session            Session @relation(fields: [session_id], references: [id])
 }
