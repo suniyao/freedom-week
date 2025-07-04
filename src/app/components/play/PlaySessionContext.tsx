@@ -17,6 +17,8 @@ export type PlaySessionType = {
     ranked: boolean,
     setRanked: (ranked: boolean) => void,
     resetSession: () => void,
+    questionTypes: string[],
+    setQuestionTypes: (questionTypes: string[]) => void,
 }
 
 export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
@@ -25,6 +27,7 @@ export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
     const [attemptedQuestions, setAttemptedQuestions] = useState<QuestionAttemptData[]>([])
     const [owner_id, setOwnerId] = useState<string>("")
     const [ranked, setRanked] = useState<boolean>(false)
+    const [questionTypes, setQuestionTypes] = useState<string[]>([])
     const addAttemptedQuestion = (question: QuestionAttemptData) => setAttemptedQuestions((prevState) => [...prevState, question]);
 
     const resetSession = () => {
@@ -51,7 +54,9 @@ export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
             setRanked,
             endTime,
             setEndTime,
-            resetSession
+            resetSession,
+            questionTypes,
+            setQuestionTypes
         }}>
             {children}
         </PlaySessionContext.Provider>
