@@ -1,10 +1,10 @@
 "use server";
 
-import {DifficultyRanking, EquationResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateQuadraticVertexQuestion(difficulty: DifficultyRanking): Promise<EquationResult> {
+export default async function generateQuadraticVertexQuestion(difficulty: DifficultyRanking): Promise<Question> {
     //basically find the vertex based on an arbitrary quadratic function
     if (difficulty === "easy") {
         //vertex form f(x) = a(x-h)^2 + c
@@ -14,7 +14,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         c = RandomInt(-10, 10, true)
 
         const equation = `${a}(x ${formatTerm(h)})^2 ${formatTerm(c)}`
-        return {equation, solution: {x: h, y: c}}
+        return {question: equation, solution: {x: h, y: c}, difficulty, type: "quadratic-vertex"}
     } else if (difficulty === "medium") {
         //factored form f(x) = a(x-m)(x-n)
         let a, m, n
@@ -25,7 +25,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         const equation = `${a}(x ${formatTerm(m)})(x ${formatTerm(n)})`
         const vertexX = (m + n) / 2;
         const vertexY = a * (vertexX - m) * (vertexX - n);
-        return {equation, solution: {x: vertexX, y: vertexY}};
+        return {question: equation, solution: {x: vertexX, y: vertexY}, difficulty, type: "quadratic-vertex"};
     } else {
         //standard form f(x) = ax^2+bx+c
         //maybe just make vertex form and then like go from there?
@@ -41,8 +41,10 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
 
         const equation = `${a}x^2 ${formatTerm(B, "x")} ${formatTerm(C)}`;
         return {
-            equation,
-            solution: { x: h, y: k }
+            question: equation,
+            solution: { x: h, y: k },
+            difficulty,
+            type: "quadratic-vertex"
         };
     }
 }

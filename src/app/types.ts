@@ -1,13 +1,16 @@
 export type DifficultyRanking = "easy" | "medium" | "hard"
 
+/*
 export type EquationResult = {equation: string, solution: {x: number, y?: number}}
 export type SystemResult = {equation_1: string, equation_2: string, solution: {x: number, y: number} }
 export type FactoringResult = {equation: string, factors: string[]}
 export type ExpansionResult = {expression: string, solution: string}
-
+ */
 export interface Question {
-    question: string,
-    solution: string | string[] | {x: number, y?: number}
+    question: string | string[],
+    solution: string | string[] | {x: number, y?: number},
+    difficulty: DifficultyRanking,
+    type: string,
 }
 
 export interface QuestionSession {
