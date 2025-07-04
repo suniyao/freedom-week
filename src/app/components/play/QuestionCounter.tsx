@@ -1,8 +1,7 @@
-
-
+"use client"
 
 type QuestionCounterProps = {
-  totalQuestions: number;
+  totalQuestions: number | string;
   currentQuestionIndex: number;
 };
 
