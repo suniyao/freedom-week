@@ -10,26 +10,63 @@ type Item = {
 
 const problemTree: Item[] = [
   {
-    label: 'Algebra',
-    children: [
-      { label: 'Expansion' },
+    label: 'All Types',
+    children: [  
       {
-        label: 'Linear',
+        label: 'Algebra',
         children: [
-          { label: 'Linear Equation' },
-          { label: 'Linear System' },
-        ]
-      },
+          { label: 'Expansion' },
+          {
+            label: 'Linear',
+            children: [
+              { label: 'Linear Equation' },
+              { label: 'Linear System' },
+            ],
+          },
+          {
+            label: 'Quadratic',
+            children: [
+              { label: 'Quadratic Factoring' },
+              { label: 'Find Vertex Coordinates' },
+            ],
+          },
+        ],
+      }, 
       {
-        label: 'Quadratic',
+        label: 'Geometry',
         children: [
-          { label: 'Quadratic Factoring' },
-          { label: 'Find Vertex Coordinates' },
-        ]
-      },
-    ]
-  }
+          { label: 'Area' },
+          { label: 'Perimeter' },
+          {
+            label: 'Circle',
+            children: [
+              { label: 'Circumference' },
+              { label: 'Area' },
+              { label: 'Chord Length' },
+            ],
+          },
+        ],
+      }, 
+      {
+        label: 'Combinatorics',
+        children: [
+          { label: 'Permutations' },
+          { label: 'Combinations' },
+          { label: 'Binomial Coefficients' },
+        ],
+      }, 
+      {
+        label: 'Number Theory',
+        children: [
+          { label: 'Prime Factorization' },
+          { label: 'GCD and LCM' },
+          { label: 'Divisibility Rules' },
+        ],
+      }, 
+    ],
+  },
 ];
+
 
 function getAllLabels(item: Item): string[] {
   const children = item.children?.flatMap(getAllLabels) || [];
@@ -54,8 +91,8 @@ function getCheckedLeaves(tree: Item[], checkedSet: Set<string>): string[] {
 }
 
 
-function CollapsibleItem({ item, checkedSet, setCheckedSet, }: { item: Item; checkedSet?: Set<string>; setCheckedSet: (set: Set<string>) => void;}) {
-  const [isOpen, setIsOpen] = useState(true);
+function CollapsibleItem({ item, checkedSet, setCheckedSet, depth = 0}: { item: Item; checkedSet?: Set<string>; setCheckedSet: (set: Set<string>) => void; depth?: number;}) {
+  const [isOpen, setIsOpen] = useState(depth < 2);
   const hasChildren = item.children && item.children.length > 0;
 
   const isChecked = checkedSet?.has(item.label);
@@ -97,7 +134,7 @@ function CollapsibleItem({ item, checkedSet, setCheckedSet, }: { item: Item; che
             transition={{ duration: 0.3 }}
           >
             {item.children!.map((child, idx) => (
-              <CollapsibleItem key={idx} item={child} checkedSet={checkedSet} setCheckedSet={setCheckedSet}/>
+              <CollapsibleItem key={idx} item={child} checkedSet={checkedSet} setCheckedSet={setCheckedSet} depth={depth + 1}/>
             ))}
           </motion.div>
         )}

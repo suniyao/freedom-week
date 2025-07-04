@@ -1,16 +1,13 @@
 'use client';
 
-import ProblemTypeMenu from '@/app/components/ProblemTypeMenu';
-import Link from 'next/link';
-import { useState } from 'react';
+import ProblemTypeMenu from "./ProblemTypeMenu";
+import { useState } from "react";
 
-export default function PlaySetUp() {
+export default function SetUp({ onStart }: { onStart: () => void }) {
   const [infinityMode, setInfinityMode] = useState(false);
-
   return (
-    <div className="h-dvh w-full flex flex-col bg-amber-100 text-stone-900 px-8 py-6 gap-6">
+    <div className="w-full min-h-screen flex flex-col bg-amber-100 text-stone-900 p-6 gap-8">
       <h1 className="text-4xl font-bold text-center">Set Up Your Game</h1>
-
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto w-full">
         {/* Left Panel - Problem Types */}
         <div className="bg-amber-200 p-6 rounded-2xl shadow-lg flex-1 flex flex-col gap-4">
@@ -44,15 +41,15 @@ export default function PlaySetUp() {
           </div>
 
           <div className="mt-2 flex justify-center">
-            <Link
-              href="/play"
+            <button
+              onClick={onStart}
               className="px-6 py-3 text-lg font-medium bg-black text-amber-100 rounded-lg hover:bg-amber-300 hover:text-black transition-all duration-200"
             >
               ▶️ Start Playing
-            </Link>
+            </button>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

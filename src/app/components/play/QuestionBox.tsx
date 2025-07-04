@@ -41,12 +41,11 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 <button className="p-2 bg-amber-400 rounded-lg hover:bg-black hover:text-amber-100 transition-all" onClick={checkAnswer}>submit</button>
                 ): (
                 <button
-            className="p-2 bg-black text-amber-100 rounded-lg hover:text-black hover:bg-amber-100 transition-all"
-            onClick={() => console.log("next question")}
-          >
+                    className="p-2 bg-black text-amber-100 rounded-lg hover:text-black hover:bg-amber-100 transition-all"
+                    onClick={() => console.log("next question")}
+                >
                  <ArrowRight size={20} />
-            {/* or just use → */}
-          </button>
+                </button>
                 )}
             </div>
         </div>

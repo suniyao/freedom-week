@@ -1,27 +1,18 @@
-"use client";
+'use client';
+import { useState } from 'react';
 
-import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import QuestionBox from "@/app/components/QuestionBox";
-import ProblemTypeMenu from '@/app/components/ProblemTypeMenu';
-import Score from '@/app/components/Score';
+import Play from '@/app/components/play/Play';
+import SetUp from '@/app/components/play/SetUp';
 
 export default function PlayPage() {
-    return (
-        <div className="h-dvh w-full flex bg-amber-100 text-stone-900">
-            <div className='w-60 p-2 bg-amber-200'>
-                <ProblemTypeMenu />
-            </div>
+    const [mode, setMode] = useState<'setup' | 'play' | 'review'>('setup');
 
-            {/* Main content */}
-            <div className="flex-1 flex items-center justify-center">
-                <QuestionBox question={{ question: "9+10", solution: "21", difficulty: "hard", type: "linear-equation" }} />
-            </div>
-            <div className='relative top-5 right-10'>
-                <div className='bg-amber-300 p-4 rounded-lg font-semibold'>
-                    <Score score={1337} />
-                </div>
-            </div>
-        </div>
+    return (
+        <main>
+            {mode === 'setup' && <SetUp onStart={() => setMode('play')} />}
+            {mode === 'play' && <Play/>}
+            {mode === 'review' && <div>Review Mode</div>}
+        </main>
     )
 }

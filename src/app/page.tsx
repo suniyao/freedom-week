@@ -16,7 +16,7 @@ export default function HomePage() {
       </div>
 
       <div className="w-full h-full justify-center text-3xl items-end pr-24 flex flex-col gap-5">
-        <Link href={"/play/setup"} className="p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline">
+        <Link href={"/play"} className="p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline">
           play ranked
         </Link>
         <div className="p-1 hover:pt-0 hover:pb-2 hover:text-4xl transition-all cursor-pointer hover:underline">
