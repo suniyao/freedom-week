@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { get } from 'http';
 
 type Item = {
   label: string;
@@ -31,18 +32,43 @@ const problemTree: Item[] = [
   }
 ];
 
-function CollapsibleItem({ item }: { item: Item }) {
-  const [isOpen, setIsOpen] = useState(false);
+function getAllLabels(item: Item): string[] {
+  const children = item.children?.flatMap(getAllLabels) || [];
+  return [item.label, ...children];
+}
+
+function CollapsibleItem({ item, checkedSet, setCheckedSet, }: { item: Item; checkedSet?: Set<string>; setCheckedSet: (set: Set<string>) => void;}) {
+  const [isOpen, setIsOpen] = useState(true);
   const hasChildren = item.children && item.children.length > 0;
 
+  const isChecked = checkedSet?.has(item.label);
+
+  const handleCheckChange = () => {
+    const allLabels = new Set(getAllLabels(item));
+    const newCheckedSet = new Set(checkedSet);
+    
+    if (isChecked) {
+      allLabels.forEach((label) => newCheckedSet.delete(label));
+    } else {
+      allLabels.forEach((label) => newCheckedSet.add(label));
+    }
+    setCheckedSet(newCheckedSet);
+  }
   return (
     <div className="ml-2">
+      <div className='flex items-center gap-2'>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckChange}
+          />
       <div
         className="cursor-pointer hover:text-blue-500 transition"
         onClick={() => hasChildren && setIsOpen(!isOpen)}
-      >
+        >
         {item.label} {hasChildren && <span>{isOpen ? '▾' : '▸'}</span>}
       </div>
+        </div>
 
       <AnimatePresence initial={false}>
         {isOpen && hasChildren && (
@@ -54,7 +80,7 @@ function CollapsibleItem({ item }: { item: Item }) {
             transition={{ duration: 0.3 }}
           >
             {item.children!.map((child, idx) => (
-              <CollapsibleItem key={idx} item={child} />
+              <CollapsibleItem key={idx} item={child} checkedSet={checkedSet} setCheckedSet={setCheckedSet}/>
             ))}
           </motion.div>
         )}
@@ -64,11 +90,15 @@ function CollapsibleItem({ item }: { item: Item }) {
 }
 
 export default function ProblemTypeMenu() {
+  const [checkedSet, setCheckedSet] = useState<Set<string>>(new Set());
   return (
     <div className="flex flex-col gap-3 text-[15px] p-4">
       {problemTree.map((item, idx) => (
-        <CollapsibleItem key={idx} item={item} />
+        <CollapsibleItem key={idx} item={item} checkedSet={checkedSet} setCheckedSet={setCheckedSet}/>
       ))}
+      <div className='pt-4 text-[15px] text-gray-500'>
+         ✅ Checked: {[...checkedSet].join(', ')}
+      </div>
     </div>
   );
 }
