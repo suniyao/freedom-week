@@ -2,27 +2,27 @@
 
 import {usePlaySession} from "@/app/components/play/PlaySessionContext";
 import {useEffect, useState} from "react";
-import {clearTimeout} from "node:timers";
 
 export default function LoadingStart() {
     const playSession = usePlaySession()
-    const [secondsLeft, setSecondsLeft] = useState(3)
+    const [secondsLeft, setSecondsLeft] = useState<number>(3.0)
 
     useEffect(() => {
         const interval = setInterval(() => {
             setSecondsLeft((prevState) => prevState - 0.1)
-        }, secondsLeft)
+            console.log(secondsLeft)
+        }, 100)
 
         const timeout = setTimeout(() => {
             playSession.startGame()
         }, 3000)
 
-        return clearInterval(interval)
-    }, [])
+        return () => {clearInterval(interval); clearTimeout(timeout)}
+    }, [playSession])
 
     return (
         <div>
-            {secondsLeft}
+            {Math.round(secondsLeft * 10) / 10}
         </div>
     )
 }
