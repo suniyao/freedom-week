@@ -12,7 +12,7 @@ export const QuestionTypePoints: Record<string, number> = {
 // functions => trigonometry => identities
 // category => subcategory => unit?
 
-export const QuestionPointMultipliers = {
+export const QuestionPointDifficultyMultipliers = {
     "easy": 0.50,
     "medium": 1.00,
     "hard": 1.30

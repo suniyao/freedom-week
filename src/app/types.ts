@@ -23,7 +23,8 @@ export interface QuestionSession {
 
 export interface QuestionAttemptData {
     id?: string,
-    type: string
+    type: string,
+    difficulty: DifficultyRanking,
     milliseconds_spent: number
     correct: boolean
 }

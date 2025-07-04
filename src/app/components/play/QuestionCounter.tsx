@@ -1,4 +1,5 @@
-'use client';
+"use client"
+
 
 import { useState } from "react";
 import QuestionStatusPreview from "./QuestionStatusPreview";
@@ -8,8 +9,9 @@ type QuestionStatus = {
   flagged: boolean;
 };
 
+
 type QuestionCounterProps = {
-  totalQuestions: number;
+  totalQuestions: number | string;
   currentQuestionIndex: number;
   questionStatuses: QuestionStatus[];
 };
