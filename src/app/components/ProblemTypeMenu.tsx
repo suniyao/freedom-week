@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { get } from 'http';
 
 type Item = {
   label: string;
@@ -36,6 +35,24 @@ function getAllLabels(item: Item): string[] {
   const children = item.children?.flatMap(getAllLabels) || [];
   return [item.label, ...children];
 }
+
+function getCheckedLeaves(tree: Item[], checkedSet: Set<string>): string[] {
+  const leaves: string[] = [];
+
+  function dfs(item: Item) {
+    const isChecked = checkedSet.has(item.label);
+    const hasChildren = item.children && item.children.length > 0;
+
+    if (!hasChildren && isChecked) {
+      leaves.push(item.label);
+    } else if (hasChildren) {
+      item.children!.forEach(dfs);
+    }
+  }
+  tree.forEach(dfs);
+  return leaves;
+}
+
 
 function CollapsibleItem({ item, checkedSet, setCheckedSet, }: { item: Item; checkedSet?: Set<string>; setCheckedSet: (set: Set<string>) => void;}) {
   const [isOpen, setIsOpen] = useState(true);
@@ -91,13 +108,15 @@ function CollapsibleItem({ item, checkedSet, setCheckedSet, }: { item: Item; che
 
 export default function ProblemTypeMenu() {
   const [checkedSet, setCheckedSet] = useState<Set<string>>(new Set());
+  const checkedLeaves = getCheckedLeaves(problemTree, checkedSet);
+
   return (
     <div className="flex flex-col gap-3 text-[15px] p-4">
       {problemTree.map((item, idx) => (
         <CollapsibleItem key={idx} item={item} checkedSet={checkedSet} setCheckedSet={setCheckedSet}/>
       ))}
       <div className='pt-4 text-[15px] text-gray-500'>
-         ✅ Checked: {[...checkedSet].join(', ')}
+         ✅ Checked: {checkedLeaves.length > 0 ? checkedLeaves.join(', ') : 'None'}
       </div>
     </div>
   );
