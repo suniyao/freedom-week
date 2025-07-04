@@ -1,10 +1,10 @@
 "use server";
 
-import {DifficultyRanking, SystemResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<SystemResult> {
+export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<Question> {
     if (difficulty === "easy") {
         //format of:
         // y = ax + b
@@ -22,9 +22,9 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const d = y - c * x;
 
         return {
-            equation_1: `y = ${a}x + ${b}`,
-            equation_2: `y = ${formatTerm(c, "x")} + ${d}`,
-            solution: { x, y }
+            question: [`y = ${a}x + ${b}`, `y = ${formatTerm(c, "x")} + ${d}`],
+            solution: { x, y },
+            difficulty
         }
     } else if (difficulty === "medium") {
         //format of:
@@ -48,9 +48,9 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const e = c * x + d * y;
 
         return {
-            equation_1: `${a}x + y = ${b}`,
-            equation_2: `${c}x ${formatTerm(d, "y")} = ${e}`,
-            solution: { x, y }
+            question: [`${a}x + y = ${b}`,`${c}x ${formatTerm(d, "y")} = ${e}`],
+            solution: { x, y },
+            difficulty
         }
     } else {
         //format of:
@@ -91,9 +91,9 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         }
 
         return {
-            equation_1: `${a}x ${formatTerm(b, "y")} = ${c}`,
-            equation_2: `${d}x ${formatTerm(e, "y")} = ${f}`,
-            solution: {x, y}
+            question: [`${a}x ${formatTerm(b, "y")} = ${c}`, `${d}x ${formatTerm(e, "y")} = ${f}`],
+            solution: {x, y},
+            difficulty
         }
     }
 }

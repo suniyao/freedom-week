@@ -1,10 +1,10 @@
 "use server";
 
-import {DifficultyRanking, EquationResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateLinearEquationQuestion(difficulty: DifficultyRanking): Promise<EquationResult> {
+export default async function generateLinearEquationQuestion(difficulty: DifficultyRanking): Promise<Question> {
     if (difficulty === "easy") {
         // form of ax + b = c, solve for x
         const a = RandomInt(0, 10)
@@ -13,7 +13,7 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (c - b)/a;
 
-        return {equation: `${a}x + ${b} = ${c}`, solution: {x}}
+        return {question: `${a}x + ${b} = ${c}`, solution: {x}, difficulty}
     } else if (difficulty === "medium") {
         // form of ax + b = c, solve for x (a can be negative)
         const a = RandomInt(-10, 10)
@@ -22,7 +22,7 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (c - b) / a;
 
-        return {equation: `${a}x ${formatTerm(b)} = ${c}`, solution:{x}}
+        return {question: `${a}x ${formatTerm(b)} = ${c}`, solution:{x}, difficulty}
     } else {
         // form of ax + b = cx + d, solve for x
         const a = RandomInt(-10, 10, true)
@@ -32,6 +32,6 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
 
         const x = (a - c)/(d - b)
 
-        return {equation: `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`, solution:{x}}
+        return {question: `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`, solution:{x}, difficulty}
     }
 }

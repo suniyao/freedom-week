@@ -1,13 +1,13 @@
 "use server";
 
-import {DifficultyRanking, EquationResult, ExpansionResult, FactoringResult, SystemResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import generateBinomialExpansionQuestion from "@/actions/questions-generator/algebra/expansion/binomial-expansion";
 import generateLinearEquationQuestion from "@/actions/questions-generator/algebra/linear/linear-equation";
 import generateLinearSystemQuestion from "@/actions/questions-generator/algebra/linear/linear-system";
 import generateQuadraticFactoringQuestion from "@/actions/questions-generator/algebra/quadratic/quadratic-factoring";
 import generateQuadraticVertexQuestion from "@/actions/questions-generator/algebra/quadratic/quadratic-vertex";
 
-export default async function generateQuestion(difficulty: DifficultyRanking, type: string): Promise<ExpansionResult|FactoringResult|EquationResult|SystemResult> {
+export default async function generateQuestion(difficulty: DifficultyRanking, type: string): Promise<Question> {
     switch (type) {
         case "binomial-expansion":
             return generateBinomialExpansionQuestion(difficulty);
