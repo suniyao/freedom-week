@@ -112,9 +112,11 @@ export default function ProblemTypeMenu() {
 
   return (
     <div className="flex flex-col gap-3 text-[15px] p-4">
+      <div className='items-center'>
       {problemTree.map((item, idx) => (
         <CollapsibleItem key={idx} item={item} checkedSet={checkedSet} setCheckedSet={setCheckedSet}/>
       ))}
+      </div>
       <div className='pt-4 text-[15px] text-gray-500'>
          ✅ Checked: {checkedLeaves.length > 0 ? checkedLeaves.join(', ') : 'None'}
       </div>
