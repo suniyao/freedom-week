@@ -8,7 +8,22 @@ export default function Play() {
     <div className="min-h-screen w-full flex bg-amber-100 text-stone-900">
       <div className='mt-5 ml-10'>
         <div className="bg-amber-200 p-4 rounded-lg font-semibold w-30">
-          <QuestionCounter totalQuestions={10} currentQuestionIndex={0} />
+          <QuestionCounter
+            totalQuestions={10}
+            currentQuestionIndex={2}
+            questionStatuses={[
+              { answered: true, flagged: false },
+              { answered: false, flagged: true },
+              { answered: false, flagged: false },
+              { answered: true, flagged: false },
+              { answered: true, flagged: false },
+              { answered: false, flagged: false },
+              { answered: false, flagged: false },
+              { answered: false, flagged: false },
+              { answered: false, flagged: false },
+              { answered: false, flagged: false },
+            ]}
+          />
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">
