@@ -14,7 +14,7 @@ export default function PlayPage() {
 
             {/* Main content */}
             <div className="flex-1 flex items-center justify-center">
-                <QuestionBox question={{ question: "9+10", solution: "21", difficulty: "hard" }} />
+                <QuestionBox question={{ question: "9+10", solution: "21", difficulty: "hard", type: "linear-equation" }} />
             </div>
         </div>
     )

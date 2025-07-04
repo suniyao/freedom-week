@@ -24,7 +24,8 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         return {
             question: [`y = ${a}x + ${b}`, `y = ${formatTerm(c, "x")} + ${d}`],
             solution: { x, y },
-            difficulty
+            difficulty,
+            type: "linear-system"
         }
     } else if (difficulty === "medium") {
         //format of:
@@ -50,7 +51,8 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         return {
             question: [`${a}x + y = ${b}`,`${c}x ${formatTerm(d, "y")} = ${e}`],
             solution: { x, y },
-            difficulty
+            difficulty,
+            type: "linear-system"
         }
     } else {
         //format of:
@@ -93,7 +95,8 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         return {
             question: [`${a}x ${formatTerm(b, "y")} = ${c}`, `${d}x ${formatTerm(e, "y")} = ${f}`],
             solution: {x, y},
-            difficulty
+            difficulty,
+            type: "linear-system"
         }
     }
 }

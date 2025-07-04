@@ -10,6 +10,7 @@ export interface Question {
     question: string | string[],
     solution: string | string[] | {x: number, y?: number},
     difficulty: DifficultyRanking,
+    type: string,
 }
 
 export interface QuestionSession {

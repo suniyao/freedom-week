@@ -14,7 +14,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         c = RandomInt(-10, 10, true)
 
         const equation = `${a}(x ${formatTerm(h)})^2 ${formatTerm(c)}`
-        return {question: equation, solution: {x: h, y: c}, difficulty}
+        return {question: equation, solution: {x: h, y: c}, difficulty, type: "quadratic-vertex"}
     } else if (difficulty === "medium") {
         //factored form f(x) = a(x-m)(x-n)
         let a, m, n
@@ -25,7 +25,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         const equation = `${a}(x ${formatTerm(m)})(x ${formatTerm(n)})`
         const vertexX = (m + n) / 2;
         const vertexY = a * (vertexX - m) * (vertexX - n);
-        return {question: equation, solution: {x: vertexX, y: vertexY}, difficulty};
+        return {question: equation, solution: {x: vertexX, y: vertexY}, difficulty, type: "quadratic-vertex"};
     } else {
         //standard form f(x) = ax^2+bx+c
         //maybe just make vertex form and then like go from there?
@@ -43,7 +43,8 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         return {
             question: equation,
             solution: { x: h, y: k },
-            difficulty
+            difficulty,
+            type: "quadratic-vertex"
         };
     }
 }

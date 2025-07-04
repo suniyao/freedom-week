@@ -14,7 +14,7 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         const expression = `(x ${formatTerm(a)})(x ${formatTerm(b)})`;
         const solution = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
 
-        return {question: expression, solution, difficulty};
+        return {question: expression, solution, difficulty, type: "binomial-expansion"};
     } else if (difficulty === "medium") {
         //(ax+b)(cx+d)
         let a,b,c,d
@@ -26,7 +26,7 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         const expression = `(${formatTerm(a, "x")} ${formatTerm(b)})(${formatTerm(c, "x")} ${formatTerm(d)})`;
         const solution = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
 
-        return {question: expression, solution, difficulty}
+        return {question: expression, solution, difficulty, type: "binomial-expansion"};
     } else {
         //a(bx+c)(dx+e) + f(gx+h)(ix+j)
         //this will be fun
@@ -46,6 +46,6 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
 
         const expression = `${a}(${b}x ${formatTerm(c)})(${d}x ${formatTerm(e)}) ${formatTerm(f)}(${g}x ${formatTerm(h)})(${i}x ${formatTerm(j)})`
         const solution = `${(a * b * d) + (f * g * i)}x^2 ${formatTerm((a * (b*e + c*d)) + (f * (g*j + h*i)), "x")} ${formatTerm((a * c * e) + (f * h * j))}`
-        return {question: expression, solution, difficulty}
+        return {question: expression, solution, difficulty, type: "binomial-expansion"};
     }
 }
