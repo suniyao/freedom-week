@@ -40,3 +40,7 @@ export type DatabaseUser = PublicUser & {
     email: string,
     password: string
 }
+export type XYShape = {
+    x: string;
+    y: string;
+}
