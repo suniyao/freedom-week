@@ -16,7 +16,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         c = RandomInt(-10, 10, true)
 
         const equation = `${a}(x ${formatTerm(h)})^2 ${formatTerm(c)}`
-        return {question: [q_text, equation], solution: {x: h, y: c}, difficulty, type: "quadratic-vertex"}
+        return {question: [q_text, equation], solution: {x: -h, y: c}, difficulty, type: "quadratic-vertex"}
     } else if (difficulty === "medium") {
         //factored form f(x) = a(x-m)(x-n)
         let a, m, n
