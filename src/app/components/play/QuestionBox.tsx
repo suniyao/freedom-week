@@ -6,6 +6,7 @@ import 'katex/dist/katex.min.css';
 import {useEffect, useRef, useState} from "react";
 import {ArrowRight} from "lucide-react";
 import normalizeMathExpression from "@/actions/reusable-utils/normalize-math-expression";
+import AnswerBox from "./AnswerBox";
 
 type QuestionBoxProps = {
     question: Question;
@@ -80,8 +81,8 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
     return (
         <div
-            className={"p-4 flex bg-amber-300 text-stone-900 rounded-lg flex-col items-center justify-center gap-4 w-1/2"}>
-            <div className={"w-3/4"}>
+            className={"p-4 flex bg-amber-300 text-stone-900 rounded-lg flex-col items-center justify-center gap-4"}>
+            <div className={"p-4"}>
                 <div>
                     {question[0]}
                 </div>
@@ -96,11 +97,14 @@ export default function QuestionBox(props: QuestionBoxProps) {
                                 return (
                                     <div key={key} className={"m-2 text-center"}>
                                         <label className={"mx-3"}>{key}</label>
-                                        <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
-                                               placeholder="your answer" key={key}
-                                               onChange={(e) => {
-                                                   answers.current[key] = e.target.value
-                                               }}/>
+                                        <AnswerBox
+                                            ringColor={ringColor}
+                                            value={answers.current[key] ?? ""}
+                                            onChange={(e) => {
+                                                answers.current[key] = e;
+                                            }}
+                                            // TODO: replace this shi with actual questionType
+                                            questionType="binomial-expansion"/> 
                                     </div>
                                 )
                         })
