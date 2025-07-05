@@ -16,17 +16,18 @@ export default function Play() {
         <div className="min-h-screen w-full flex bg-amber-100 text-stone-900">
             <div className='mt-5 ml-10'>
                 <div className="bg-amber-200 p-4 rounded-lg font-semibold w-30">
-                    <QuestionCounter totalQuestions={playSession.playMode === "infinity" ? "∞" : playSession.questions.length} currentQuestionIndex={playSession.attemptedQuestions.length - 1} questionStatuses={[]}>
+                    <QuestionCounter totalQuestions={playSession.playMode === "infinity" ? "∞" : playSession.questions.length} currentQuestionIndex={playSession.attemptedQuestions.length - 1} questionStatuses={[]}/>
                 </div>
             </div>
             <div className="flex-1 flex items-center justify-center">
                 <QuestionBox
-                    question={{question: "9+10", solution: "21", difficulty: "hard", type: "linear-equation"}}/>
+                    question={playSession.questions[playSession.attemptedQuestions.length]}/>
             </div>
             <div className='mt-5 mr-10'>
                 <div className='bg-amber-200 p-4 rounded-lg font-semibold w-30'>
                     <Score score={score}/>
                 </div>
             </div>
+        </div>
     )
 }

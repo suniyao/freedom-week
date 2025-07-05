@@ -7,7 +7,7 @@ export type FactoringResult = {equation: string, factors: string[]}
 export type ExpansionResult = {expression: string, solution: string}
  */
 export interface Question {
-    question: string | string[],
+    question: string[],
     solution: string | string[] | {x: number, y?: number},
     difficulty: DifficultyRanking,
     type: string,
