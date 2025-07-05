@@ -26,7 +26,7 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         c = RandomInt(-5, 5, true)
         d = RandomInt(-10, 10, true)
 
-        const expression = `(${formatTerm(a, "x")} ${formatTerm(b)})(${formatTerm(c, "x")} ${formatTerm(d)})`;
+        const expression = `(${a}x ${formatTerm(b)})(${c}x ${formatTerm(d)})`;
         const solution = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
 
         return {question: [q_text, expression], solution, difficulty, type: "binomial-expansion"};

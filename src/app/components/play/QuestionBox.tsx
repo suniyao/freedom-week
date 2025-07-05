@@ -34,6 +34,11 @@ export default function QuestionBox(props: QuestionBoxProps) {
             const xCorrect = normalizedX === normalizedSolutionX;
             const yCorrect = solution.y ? normalizedY === normalizedSolutionY : true;
 
+            console.log(xCorrect);
+            console.log(yCorrect);
+            console.log(normalizedX)
+            console.log(normalizedSolutionX)
+
             setQuestionStatus(xCorrect && yCorrect ? "correct" : "incorrect");
         } else if (typeof solution === "string") {
             const normalizedUser = normalizeMathExpression(answers.current[0] ?? "");
@@ -61,12 +66,17 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 : "";
 
     useEffect(() => {
-        if (typeof solution === "string") answers.current[0] = ""
+        answers.current = {}
+        if (typeof solution === "string") answers.current["answer"] = ""
         else if ("x" in solution && "y" in solution) {
             answers.current["x"] = "";
             if (solution.y) answers.current["y"] = ""
         } else (solution as string[]).forEach((_, index) => answers.current[index] = "")
-    }, [solution])
+        console.log(answers.current)
+        console.log(solution)
+        console.log(Object.keys(answers.current))
+    }, [props])
+
 
     return (
         <div
@@ -83,10 +93,9 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 <div className={"flex flex-col gap-2"}>
                     {
                         Object.keys(answers.current).map((key, index) => {
-                            if (key === "x" || key === "y") {
                                 return (
-                                    <div key={key}>
-                                        <label>{key}</label>
+                                    <div key={key} className={"m-2 text-center"}>
+                                        <label className={"mx-3"}>{key}</label>
                                         <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
                                                placeholder="your answer" key={key}
                                                onChange={(e) => {
@@ -94,17 +103,6 @@ export default function QuestionBox(props: QuestionBoxProps) {
                                                }}/>
                                     </div>
                                 )
-                            } else {
-                                return (
-                                    <div key={key}>
-                                        <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
-                                               placeholder="your answer" key={index}
-                                               onChange={(e) => {
-                                                   answers.current[key] = e.target.value
-                                               }}/>
-                                    </div>
-                                )
-                            }
                         })
                     }
                 </div>

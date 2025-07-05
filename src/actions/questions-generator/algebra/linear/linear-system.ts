@@ -4,6 +4,8 @@ import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
+const q_text = "Solve for x and y in the following linear system."
+
 export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<Question> {
     if (difficulty === "easy") {
         //format of:
@@ -22,7 +24,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const d = y - c * x;
 
         return {
-            question: [`y = ${a}x + ${b}`, `y = ${formatTerm(c, "x")} + ${d}`],
+            question: [q_text, `y = ${a}x + ${b}`, `y = ${formatTerm(c, "x")} + ${d}`],
             solution: { x, y },
             difficulty,
             type: "linear-system"
@@ -49,7 +51,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const e = c * x + d * y;
 
         return {
-            question: [`${a}x + y = ${b}`,`${c}x ${formatTerm(d, "y")} = ${e}`],
+            question: [q_text, `${a}x + y = ${b}`,`${c}x ${formatTerm(d, "y")} = ${e}`],
             solution: { x, y },
             difficulty,
             type: "linear-system"
@@ -93,7 +95,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         }
 
         return {
-            question: [`${a}x ${formatTerm(b, "y")} = ${c}`, `${d}x ${formatTerm(e, "y")} = ${f}`],
+            question: [q_text, `${a}x ${formatTerm(b, "y")} = ${c}`, `${d}x ${formatTerm(e, "y")} = ${f}`],
             solution: {x, y},
             difficulty,
             type: "linear-system"
