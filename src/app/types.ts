@@ -8,7 +8,7 @@ export type ExpansionResult = {expression: string, solution: string}
  */
 export interface Question {
     question: string[],
-    solution: string | string[] | {x: number, y?: number},
+    solution: string |  {x: number, y?: number} | Record<string, number | string>,
     difficulty: DifficultyRanking,
     type: string,
 }
