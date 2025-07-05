@@ -1,17 +1,17 @@
 import { InlineMath } from "react-katex";
 
-type QuestionType = 
-  | 'binomial-expansion'
-  | 'linear-equation'
-  | 'linear-system'
-  | 'quadratic-factoring'
-  | 'quadratic-vertex';
+// type QuestionType = 
+//   | 'binomial-expansion'
+//   | 'linear-equation'
+//   | 'linear-system'
+//   | 'quadratic-factoring'
+//   | 'quadratic-vertex';
 
 type AnswerBoxProps = {
   ringColor?: string;
   value?: string;
   onChange?: (value: string) => void;
-  questionType?: QuestionType;
+  questionType?: string;
   key?: string;
 }
 
@@ -25,7 +25,7 @@ export default function AnswerBox({ ringColor, value, key, onChange, questionTyp
           <input className={inputClass} />
           <InlineMath> ~ x^2 + ~ </InlineMath>
           <input className={inputClass} />
-          <InlineMath>~ x + ~</InlineMath>
+          <InlineMath>~ x  + ~</InlineMath>
           <input className={inputClass} />
         </div>
       )
@@ -72,7 +72,7 @@ export default function AnswerBox({ ringColor, value, key, onChange, questionTyp
         <div>
           <InlineMath>(~</InlineMath>
           <input className={inputClass} />
-          <InlineMath>~,~</InlineMath>
+          <InlineMath>~,~ </InlineMath>
           <input className={inputClass} />
           <InlineMath>~)</InlineMath>
         </div>

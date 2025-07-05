@@ -17,7 +17,7 @@ function isXYSolution(sol: unknown): sol is { x: string; y?: string } {
 }
 
 export default function QuestionBox(props: QuestionBoxProps) {
-    const {question, solution} = props.question;
+    const {question, solution, type} = props.question;
     //const [answer, setAnswer] = useState("");
     //const [answers, setAnswers] = useState<Record<number|string, string>>({})
     const answers = useRef<Record<string | number, string>>({})
@@ -103,8 +103,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
                                             onChange={(e) => {
                                                 answers.current[key] = e;
                                             }}
-                                            // TODO: replace this shi with actual questionType
-                                            questionType="binomial-expansion"/> 
+                                            questionType={type}/> 
                                     </div>
                                 )
                         })

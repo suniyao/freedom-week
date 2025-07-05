@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function SetUp(props: {onStart: VoidFunction}) {
     //const [infinityMode, setInfinityMode] = useState(false);
     const playSession = usePlaySession();
-    const [questionCount, setQuestionCount] = useState<number>(0);
+    const [questionCount, setQuestionCount] = useState<number>(10);
     const [error, setError] = useState<string>("");
 
     const handleStart = () => {
@@ -88,6 +88,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                         <h2 className="text-2xl font-semibold">How many questions?</h2>
                         <input
                           type="number"
+                          value={questionCount}
                           placeholder="# of questions"
                           disabled={playSession.playMode === "infinity"}
                           min="1"
@@ -101,7 +102,10 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                             disabled:bg-stone-200 disabled:text-stone-500 disabled:cursor-not-allowed
                             border-stone-300
                           `}
-                          onChange={(e) => setQuestionCount(parseInt(e.target.value))}
+                          onChange={(e) => {
+                            const val = Math.max(1, Math.floor(Number(e.target.value)));
+                            setQuestionCount(isNaN(val) ? 1 : val);
+                          }}
                         />
                         <div className="flex items-center gap-3 mt-2">
                             <input
