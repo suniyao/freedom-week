@@ -5,11 +5,15 @@ import {BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
 import {useEffect, useRef, useState} from "react";
 import {ArrowRight} from "lucide-react";
+import normalizeMathExpression from "@/actions/reusable-utils/normalize-math-expression";
 
 type QuestionBoxProps = {
     question: Question;
 }
 
+function isXYSolution(sol: unknown): sol is { x: string; y?: string } {
+    return typeof sol === "object" && sol !== null && "x" in sol;
+}
 
 export default function QuestionBox(props: QuestionBoxProps) {
     const {question, solution} = props.question;
@@ -18,40 +22,36 @@ export default function QuestionBox(props: QuestionBoxProps) {
     const answers = useRef<Record<string | number, string>>({})
     const [questionStatus, setQuestionStatus] = useState<"unanswered" | "correct" | "incorrect">("unanswered");
     const checkAnswer = () => {
-        if (typeof solution === "object" && "x" in solution && "y" in solution) {
-            const xCorrect = (answers.current.x ?? "").trim() === solution.x.toString().trim();
-            const yCorrect = solution.y
-                ? (answers.current.y ?? "").trim() === solution.y.toString().trim()
-                : true;
+        if (isXYSolution(solution)) {
+            const normalizedX = normalizeMathExpression(answers.current.x ?? "");
+            const normalizedSolutionX = normalizeMathExpression(solution.x.toString());
+
+            const normalizedY = normalizeMathExpression(answers.current.y ?? "");
+            const normalizedSolutionY = solution.y
+                ? normalizeMathExpression(solution.y.toString())
+                : "";
+
+            const xCorrect = normalizedX === normalizedSolutionX;
+            const yCorrect = solution.y ? normalizedY === normalizedSolutionY : true;
+
             setQuestionStatus(xCorrect && yCorrect ? "correct" : "incorrect");
         } else if (typeof solution === "string") {
-            if ((answers.current[0] ?? "").trim() === solution.toString().trim()) {
-                setQuestionStatus("correct");
-            }
+            const normalizedUser = normalizeMathExpression(answers.current[0] ?? "");
+            const normalizedSolution = normalizeMathExpression(solution);
+
+            setQuestionStatus(normalizedUser === normalizedSolution ? "correct" : "incorrect");
         } else {
-            const solutions = (solution as string[]).map(s => s.trim()).sort();
-            const answersArray = Object.values(answers.current).map(s => s.trim()).sort();
+            // array solutions
+            const solutions = (solution as string[]).map(normalizeMathExpression).sort();
+            const answersArray = Object.values(answers.current).map(normalizeMathExpression).sort();
 
             const allMatch =
                 solutions.length === answersArray.length &&
                 solutions.every((s, i) => s === answersArray[i]);
 
-            if (allMatch) {
-                setQuestionStatus("correct");
-            } else {
-                setQuestionStatus("incorrect");
-            }
+            setQuestionStatus(allMatch ? "correct" : "incorrect");
         }
-
-        /*
-        if (answer.trim() === solution.toString().trim()) {
-            setQuestionStatus("correct");
-        } else {
-            setQuestionStatus("incorrect");
-        }
-
-         */
-    }
+    };
 
     const ringColor =
         questionStatus === "correct"
@@ -64,7 +64,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
         if (typeof solution === "string") answers.current[0] = ""
         else if ("x" in solution && "y" in solution) {
             answers.current["x"] = "";
-            answers.current["y"] = ""
+            if (solution.y) answers.current["y"] = ""
         } else (solution as string[]).forEach((_, index) => answers.current[index] = "")
     }, [solution])
 
@@ -80,35 +80,34 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 </div>
             </div>
             <div className="flex flex-row gap-2">
-                {
-                    Object.keys(answers.current).map((key, index) => {
-                        if (key === "x" || key === "y") {
-                            return (
-                                <div>
-                                    <label>{key}</label>
-                                    <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
-                                           placeholder="your answer" key={key}
-                                           onChange={(e) => {
-                                               answers.current[key] = e.target.value
-                                           }}/>
-                                </div>
-                            )
-                        } else {
-                            return (
-                                <div>
-                                    <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
-                                           placeholder="your answer" key={index}
-                                           onChange={(e) => {
-                                               answers.current[key] = e.target.value
-                                           }}/>
-                                </div>
-                            )
-                        }
-                    })
-                }
-                <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`} placeholder="your answer"
-                       onChange={(e) => {/*set answer here*/
-                       }}/>
+                <div className={"flex flex-col gap-2"}>
+                    {
+                        Object.keys(answers.current).map((key, index) => {
+                            if (key === "x" || key === "y") {
+                                return (
+                                    <div key={key}>
+                                        <label>{key}</label>
+                                        <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
+                                               placeholder="your answer" key={key}
+                                               onChange={(e) => {
+                                                   answers.current[key] = e.target.value
+                                               }}/>
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <div key={key}>
+                                        <input className={`p-2 bg-amber-100 rounded-lg ${ringColor}`}
+                                               placeholder="your answer" key={index}
+                                               onChange={(e) => {
+                                                   answers.current[key] = e.target.value
+                                               }}/>
+                                    </div>
+                                )
+                            }
+                        })
+                    }
+                </div>
                 {questionStatus === "unanswered" ? (
                     <button className="p-2 bg-amber-400 rounded-lg hover:bg-black hover:text-amber-100 transition-all"
                             onClick={checkAnswer}>submit</button>
