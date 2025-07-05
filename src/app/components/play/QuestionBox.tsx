@@ -3,7 +3,7 @@
 import {Question} from "@/app/types";
 import {BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {ArrowRight} from "lucide-react";
 import normalizeMathExpression from "@/actions/reusable-utils/normalize-math-expression";
 import AnswerBox from "./AnswerBox";
@@ -16,18 +16,26 @@ function isXYSolution(sol: unknown): sol is { x: string; y?: string } {
     return typeof sol === "object" && sol !== null && "x" in sol;
 }
 
+function isABCSolution(sol: unknown): sol is Record<string, number> {
+  return typeof sol === "object" &&
+    sol !== null &&
+    !Array.isArray(sol) &&
+    Object.values(sol).every(v => typeof v === "number");
+}
+
+
 export default function QuestionBox(props: QuestionBoxProps) {
     const {question, solution, type} = props.question;
-    //const [answer, setAnswer] = useState("");
-    //const [answers, setAnswers] = useState<Record<number|string, string>>({})
-    const answers = useRef<Record<string | number, string>>({})
+    const [inputStatus, setInputStatus] = useState<Record<string, "correct" | "incorrect" | "unanswered">>({});
+    const [answers, setAnswers] = useState<Record<number|string, string>>({})
+    // const answers = useRef<Record<string | number, string>>({})
     const [questionStatus, setQuestionStatus] = useState<"unanswered" | "correct" | "incorrect">("unanswered");
     const checkAnswer = () => {
         if (isXYSolution(solution)) {
-            const normalizedX = normalizeMathExpression(answers.current.x ?? "");
+            const normalizedX = normalizeMathExpression(answers.x ?? "");
             const normalizedSolutionX = normalizeMathExpression(solution.x.toString());
 
-            const normalizedY = normalizeMathExpression(answers.current.y ?? "");
+            const normalizedY = normalizeMathExpression(answers.y ?? "");
             const normalizedSolutionY = solution.y
                 ? normalizeMathExpression(solution.y.toString())
                 : "";
@@ -41,15 +49,15 @@ export default function QuestionBox(props: QuestionBoxProps) {
             console.log(normalizedSolutionX)
 
             setQuestionStatus(xCorrect && yCorrect ? "correct" : "incorrect");
-        } else if (typeof solution === "string") {
-            const normalizedUser = normalizeMathExpression(answers.current[0] ?? "");
+        }  else if (typeof solution === "string") {
+            const normalizedUser = normalizeMathExpression(answers[0] ?? "");
             const normalizedSolution = normalizeMathExpression(solution);
 
             setQuestionStatus(normalizedUser === normalizedSolution ? "correct" : "incorrect");
-        } else {
+        }  else {
             // array solutions
             const solutions = (solution as string[]).map(normalizeMathExpression).sort();
-            const answersArray = Object.values(answers.current).map(normalizeMathExpression).sort();
+            const answersArray = Object.values(answers).map(normalizeMathExpression).sort();
 
             const allMatch =
                 solutions.length === answersArray.length &&
@@ -67,16 +75,34 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 : "";
 
     useEffect(() => {
-        answers.current = {}
-        if (typeof solution === "string") answers.current["answer"] = ""
-        else if ("x" in solution && "y" in solution) {
-            answers.current["x"] = "";
-            if (solution.y) answers.current["y"] = ""
-        } else (solution as string[]).forEach((_, index) => answers.current[index] = "")
-        console.log(answers.current)
-        console.log(solution)
-        console.log(Object.keys(answers.current))
-    }, [props])
+        const newAnswers: Record<string | number, string> = {};
+        const newStatuses: Record<string, "correct" | "incorrect" | "unanswered"> = {};
+        if (typeof solution === "string") {
+            newAnswers["answer"] = "";
+            newStatuses["answer"] = "unanswered";
+        } else if ("x" in solution && "y" in solution) {
+            newAnswers["x"] = "";
+            newStatuses["x"] = "unanswered";
+            if (solution.y) {
+            newAnswers["y"] = "";
+            newStatuses["y"] = "unanswered";
+            }
+        } else if (isABCSolution(solution)) {
+            Object.keys(solution).forEach((key) => {
+            newAnswers[key] = "";
+            newStatuses[key] = "unanswered";
+            });
+        } else {
+            (solution).forEach((_, index) => {
+            newAnswers[index] = "";
+            newStatuses[index] = "unanswered";
+            });
+        }
+        setAnswers(newAnswers);
+        console.log(answers);
+        console.log(solution);
+        console.log(Object.keys(answers));
+    }, [props]);
 
 
     return (
@@ -92,22 +118,26 @@ export default function QuestionBox(props: QuestionBoxProps) {
             </div>
             <div className="flex flex-row gap-2">
                 <div className={"flex flex-col gap-2"}>
-                    {
-                        Object.keys(answers.current).map((key, index) => {
-                                return (
-                                    <div key={key} className={"m-2 text-center"}>
-                                        <label className={"mx-3"}>{key}</label>
-                                        <AnswerBox
-                                            ringColor={ringColor}
-                                            value={answers.current[key] ?? ""}
-                                            onChange={(e) => {
-                                                answers.current[key] = e;
-                                            }}
-                                            questionType={type}/> 
-                                    </div>
-                                )
-                        })
-                    }
+                    {["quadratic-vertex", "quadratic-factoring", "binomial-expansion", "linear-system"].includes(type) ? (
+                    <AnswerBox
+                        values={answers}
+                        onValuesChange={(newValues) => setAnswers(newValues)}
+                        questionType={type}
+                    />
+                    ) : (
+                    // fallback to individual inputs for simple types like 'linear-equation'
+                    Object.keys(answers).map((key) => (
+                        <div key={key} className="m-2 text-center">
+                        <label className="mx-3">{key}</label>
+                        <AnswerBox
+                            values={{ [key]: answers[key] }}
+                            onValuesChange={(v) => setAnswers(prev => ({ ...prev, ...v }))}
+                            questionType={type}
+                            inputStatuses = {inputStatus}
+                        />
+                        </div>
+                    ))
+                    )}
                 </div>
                 {questionStatus === "unanswered" ? (
                     <button className="p-2 bg-amber-400 rounded-lg hover:bg-black hover:text-amber-100 transition-all"
@@ -124,4 +154,5 @@ export default function QuestionBox(props: QuestionBoxProps) {
         </div>
     )
 }
-//remember me, no matter what this result means
+//remember me, no matter what this result means 
+// BRUH WHAT?
