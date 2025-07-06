@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronDown, ChevronUp, XCircle, AlarmClock} from "lucide-react";
 import { QuestionAttemptData } from "@/app/types";
+import Image from "next/image";
 
 type SingleProblemReviewProps = {
   index: number;
@@ -113,18 +114,23 @@ export default function SingleProblemReview({
             animate={{ opacity: 1, maxHeight: 500, y: 0 }}
             exit={{ opacity: 0, maxHeight: 0, y: -6 }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden mt-4 border-t pt-4 space-y-3"
+            className="overflow-hidden mt-4 border-t pt-4 space-y-3 flex flex-row"
           >
-            <div className="text-base whitespace-pre-wrap">
-              {typeof question === "string" ? question : question.join("\n")}
-            </div>
+            <div className="w-6/7">
+              <div className="text-base whitespace-pre-wrap">
+                {typeof question === "string" ? question : question.join("\n")}
+              </div>
 
-            <div className="text-sm">
-              <span className="font-medium">Solution: </span>
-              {formatAnswer(solution)}
-            </div>
+              <div className="text-sm">
+                <span className="font-medium">Solution: </span>
+                {formatAnswer(solution)}
+              </div>
 
-            <div className="text-sm text-gray-500 italic">Type: {type}</div>
+              <div className="text-sm text-gray-500 italic">Type: {type}</div>
+            </div>
+            <div>
+              <Image src={`/memes/${isCorrect ? "correct" : "incorrect"}/${Math.floor(Math.random() * 10) + 1}.jpg`} width={64} height={64} alt={`random cat meme for ${isCorrect ? "correct" : "incorrect"} question`}/>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
