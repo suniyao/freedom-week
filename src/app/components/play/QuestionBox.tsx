@@ -27,11 +27,10 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
     const checkAnswer = () => {
         setEndTime(Date.now())
-        const correct = markQuestion(type, answers, solution);
-        if (correct) {
-            setQuestionStatus("correct")
-
-        } else setQuestionStatus("incorrect");
+        const { correct, inputStatus } = markQuestion(type, answers, solution);
+        setInputStatus(inputStatus);
+        setQuestionStatus(correct ? "correct" : "incorrect");
+    }
         /*
         if (isXYSolution(solution)) {
             const normalizedX = normalizeMathExpression(answers.x ?? "");
@@ -80,7 +79,6 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
          */
         //TODO: new checkAnswer function, maps types to markQuestion functions
-    };
 
     useEffect(() => {
         const newAnswers: Record<string | number, string> = {};
@@ -153,7 +151,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
                         <ArrowRight size={20}/>
                     </button>
                 )}
-                {
+                {/* {
                     questionStatus === "correct" && (
                         <div>correct!!!</div>
                     )
@@ -165,7 +163,8 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
                         </div>
                     )
-                }
+                } */}
+                {/* im not gonna accept this shit like UI BRO  */}
             </div>
         </div>
     )

@@ -25,15 +25,15 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
     case 'binomial-expansion':
       return (
         <div>
-          <input className={inputClass + `${getRingColor("A")}`} 
+          <input className={inputClass + `${getRingColor("a")}`} 
             value={values?.a ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, a: e.target.value })}/>
           <InlineMath> ~ x^2 + ~ </InlineMath>
-          <input className={inputClass + `${getRingColor("B")}`} 
+          <input className={inputClass + `${getRingColor("b")}`} 
             value={values?.b ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, b: e.target.value })}/>
           <InlineMath>~ x  + ~</InlineMath>
-          <input className={inputClass + `${getRingColor("C")}`} 
+          <input className={inputClass + `${getRingColor("c")}`} 
             value={values?.c ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, c: e.target.value })}/>
         </div>
@@ -69,15 +69,25 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
     case 'quadratic-factoring':
       return (
         <div>
-          <input className={inputClass} />
+          <input className={clsx(inputClass, getRingColor("coefficient"))} 
+              value={values?.coefficient ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, coefficient: e.target.value })}/>
           <InlineMath>~(~</InlineMath>
-          <input className={inputClass} />
+          <input className={clsx(inputClass, getRingColor("coefficient_1"))} 
+              value={values?.coefficient_1 ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, coefficient_1: e.target.value })}/>
           <InlineMath>~x + ~</InlineMath>
-          <input className={inputClass} />
+          <input className={clsx(inputClass, getRingColor("constant_1"))} 
+              value={values?.constant_1 ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, constant_1: e.target.value })}/>
           <InlineMath>~)(~</InlineMath>
-          <input className={inputClass} />
+          <input className={clsx(inputClass, getRingColor("coefficient_2"))} 
+              value={values?.coefficient_2 ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, coefficient_2: e.target.value })}/>
           <InlineMath>~x + </InlineMath>
-          <input className={inputClass} />
+          <input className={clsx(inputClass, getRingColor("constant_2"))} 
+              value={values?.constant_2 ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, constant_2: e.target.value })}/>
           <InlineMath>~)</InlineMath>
         </div>
       )
