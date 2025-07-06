@@ -59,7 +59,7 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
               onChange={(e) => onValuesChange?.({ ...values, x: e.target.value })}/>
           </div>
           <div>
-            <InlineMath> y=~</InlineMath>
+            <InlineMath>, y=~</InlineMath>
             <input className={clsx(inputClass, getRingColor("y"))} 
               value={values?.y ?? ""}
               onChange={(e) => onValuesChange?.({ ...values, y: e.target.value })}/>
