@@ -102,7 +102,8 @@ export default function QuestionBox(props: QuestionBoxProps) {
                             const attemptedQuestion = {
                                 question: props.question,
                                 correct: questionStatus === "correct" && true,
-                                milliseconds_spent: endTime - startTime
+                                milliseconds_spent: endTime - startTime,
+                                answer: answers,
                             }
                             console.log(attemptedQuestion)
                             playSession.addAttemptedQuestion(attemptedQuestion)

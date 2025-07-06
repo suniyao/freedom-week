@@ -9,7 +9,7 @@ const q_text = "Solve for x."
 export default async function generateLinearEquationQuestion(difficulty: DifficultyRanking): Promise<Question> {
     if (difficulty === "easy") {
         // form of ax + b = c, solve for x
-        const a = RandomInt(0, 10)
+        const a = RandomInt(0, 10, true)
         const b = RandomInt(-10, 10)
         const x = RandomInt(-10, 10)
         const c = a*x + b;
@@ -17,7 +17,7 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
         return {question: [q_text, `${a}x + ${b} = ${c}`], solution: {x}, difficulty, type: "linear-equation"};
     } else if (difficulty === "medium") {
         // form of ax + b = c, solve for x (a can be negative)
-        const a = RandomInt(-10, 10)
+        const a = RandomInt(-10, 10, true)
         const x = RandomInt(-10, 10)
         const b = RandomInt(-10, 10)
         const c = a*x + b

@@ -25,7 +25,7 @@ export interface QuestionAttemptData {
     id?: string,
     //type: string,
     //difficulty: DifficultyRanking,
-    answer?: string[],
+    answer: Record<string, string|number>,
     milliseconds_spent: number
     correct: boolean,
     question: Question
