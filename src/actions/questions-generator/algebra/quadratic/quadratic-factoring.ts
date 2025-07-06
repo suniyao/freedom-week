@@ -18,7 +18,10 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         //const factors = [`(x+${a})`, `(x+${b})`]
 
         const solution = {
+            coefficient: 1,
+            coefficient_1: 1,
             constant_1: a,
+            coefficient_2: 1,
             constant_2: b
         }
 
@@ -42,6 +45,7 @@ export default async function generateQuadraticFactoringQuestion(difficulty: Dif
         //const factors = [`(${a}x ${formatTerm(b)})`, `(${c}x ${formatTerm(d)})`]
 
         const solution = {
+            coefficient: 1,
             coefficient_1: new_a,
             coefficient_2: new_c,
             constant_1: new_b,
