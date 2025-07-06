@@ -28,7 +28,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const d = y - c * x;
 
         return {
-            question: [q_text, `y = ${a}x + ${b}`, `y = ${formatTerm(c, "x")} + ${d}`],
+            question: [q_text, `\\begin{cases} y = ${a}x + ${b}\\\\ y = ${formatTerm(c, "x")} + ${d} \\end{cases}`],
             solution: { x, y },
             difficulty,
             type: "linear-system"
@@ -55,7 +55,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const e = c * x + d * y;
 
         return {
-            question: [q_text, `${a}x + y = ${b}`,`${c}x ${formatTerm(d, "y")} = ${e}`],
+            question: [q_text, `\\begin{cases} ${a}x + y = ${b}\\\\ ${c}x ${formatTerm(d, "y")} = ${e}\\end{cases}`],
             solution: { x, y },
             difficulty,
             type: "linear-system"
@@ -91,7 +91,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         // x = (fb - ce) / (bd - ae)
 
         return {
-            question: [q_text, `${a}x ${formatTerm(b, "y")} = ${c}`, `${d}x ${formatTerm(e, "y")} = ${f}`],
+            question: [q_text, `\\begin{cases} ${a}x ${formatTerm(b, "y")}= ${c}\\\\ ${d}x ${formatTerm(e, "y")}= ${f} \\end{cases}`],
             solution: {x, y},
             difficulty,
             type: "linear-system"
