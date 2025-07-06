@@ -26,11 +26,13 @@ export default function SingleProblemReview({
   } = attempt;
 
   const formatAnswer = (ans: any) => {
-      if (ans && !Array.isArray(ans)) {
-        return formatAnswerByType(type, ans);
-      }
-      else return formatAnswer(ans);
-  };
+    if (typeof ans === "string") return ans;
+    if (Array.isArray(ans)) return ans.join(", ");
+    if (typeof ans === "object") {
+      return `x= ${ans.x}${ans.y !== undefined ? `, y= ${ans.y}` : ""}`;
+    }
+    return JSON.stringify(ans);
+  } 
 
   const difficultyColors: Record<string, string> = {
     easy: "bg-green-100 text-green-700",
