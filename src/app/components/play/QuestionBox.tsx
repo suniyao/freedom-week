@@ -7,18 +7,26 @@ import {useEffect, useState} from "react";
 import {ArrowRight} from "lucide-react";
 import AnswerBox from "./AnswerBox";
 import markQuestion from "@/actions/questions-marker/mark-question";
+import {usePlaySession} from "@/app/components/play/PlaySessionContext";
 
 type QuestionBoxProps = {
     question: Question;
 }
 
 export default function QuestionBox(props: QuestionBoxProps) {
-    const {question, solution, type} = props.question;
+    const {question, solution, type, difficulty} = props.question;
     const [inputStatus, setInputStatus] = useState<Record<string, "correct" | "incorrect" | "unanswered">>({});
     const [answers, setAnswers] = useState<Record<string, string | number>>({})
     // const answers = useRef<Record<string | number, string>>({})
     const [questionStatus, setQuestionStatus] = useState<"unanswered" | "correct" | "incorrect">("unanswered");
+
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
+
+    const playSession = usePlaySession()
+
     const checkAnswer = () => {
+        setEndTime(Date.now())
         const correct = markQuestion(type, answers, solution);
         if (correct) {
             setQuestionStatus("correct")
@@ -80,6 +88,8 @@ export default function QuestionBox(props: QuestionBoxProps) {
             newStatuses[key] = "unanswered";
         });
         setAnswers(newAnswers);
+        setStartTime(Date.now())
+        setQuestionStatus("unanswered")
         console.log(answers);
         console.log(solution);
         console.log(Object.keys(answers));
@@ -127,7 +137,16 @@ export default function QuestionBox(props: QuestionBoxProps) {
                 ) : (
                     <button
                         className="p-2 bg-black text-amber-100 rounded-lg hover:text-black hover:bg-amber-100 transition-all"
-                        onClick={() => console.log("next question")}
+                        onClick={() => {
+                            const attemptedQuestion = {
+                                type,
+                                difficulty,
+                                correct: questionStatus === "correct" && true,
+                                milliseconds_spent: endTime - startTime
+                            }
+                            console.log(attemptedQuestion)
+                            playSession.addAttemptedQuestion(attemptedQuestion)
+                        }}
                     >
                         <ArrowRight size={20}/>
                     </button>
