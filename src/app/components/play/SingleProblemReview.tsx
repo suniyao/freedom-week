@@ -6,8 +6,6 @@ import {CheckCircle, ChevronDown, ChevronUp, XCircle, AlarmClock} from "lucide-r
 import {QuestionAttemptData} from "@/app/types";
 import Image from "next/image";
 import formatTerm from "@/actions/reusable-utils/format-term";
-import {formatAnswerByType, formatSolutionByType} from "@/actions/reusable-utils/format";
-
 type SingleProblemReviewProps = {
     index: number;
     attempt: QuestionAttemptData;
@@ -26,15 +24,17 @@ export default function SingleProblemReview({
         milliseconds_spent,
     } = attempt;
 
-    const formatAnswer = (ans: any) => {
+    const formatAnswer = (ans: any, type:string) => {
         console.log(answer)
         console.log(ans)
 
         if (typeof ans === "string") return ans;
         if (Array.isArray(ans)) return ans.join(", ");
         if (typeof ans === "object") {
-            if (ans.x) {
+            if (ans.x && type!=="quadratic-vertex") {
                 return `x= ${ans.x}${ans.y !== undefined ? `, y= ${ans.y}` : ""}`;
+            } else if (type ==="quadratic-vertex") {
+              return `(${ans.x}, ${ans.y})`;
             } else if (ans.A && ans.B && ans.C) {
                 return `${ans.A}x^2 ${formatTerm(ans.B, "x")} ${formatTerm(ans.C)}`;
             } else if (ans.coefficient_1 && ans.coefficient_2 && ans.constant_1 && ans.constant_2) {
@@ -96,16 +96,8 @@ export default function SingleProblemReview({
 
                     <div className="text-sm">
                         <span className="font-medium">Your Answer: </span>
-                        {formatAnswer(answer)}
+                        {formatAnswer(answer, type)}
                     </div>
-
-                    {!isCorrect && (
-                        <div className="text-sm">
-                            <span className="font-medium">Correct Answer: </span>
-                            {formatAnswer(solution)}
-                        </div>
-                    )}
-
                 </div>
 
                 <div className="ml-2 shrink-0">
@@ -134,7 +126,7 @@ export default function SingleProblemReview({
 
                             <div className="text-sm">
                                 <span className="font-medium">Solution: </span>
-                                {formatAnswer(solution)}
+                                {formatAnswer(solution, type)}
                             </div>
                             {/*<div className="text-sm">
                                 <span className="font-medium">Solution: </span>
