@@ -142,8 +142,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
                         className="p-2 bg-black text-amber-100 rounded-lg hover:text-black hover:bg-amber-100 transition-all"
                         onClick={() => {
                             const attemptedQuestion = {
-                                type,
-                                difficulty,
+                                question: props.question,
                                 correct: questionStatus === "correct" && true,
                                 milliseconds_spent: endTime - startTime
                             }

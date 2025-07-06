@@ -23,10 +23,12 @@ export interface QuestionSession {
 
 export interface QuestionAttemptData {
     id?: string,
-    type: string,
-    difficulty: DifficultyRanking,
+    //type: string,
+    //difficulty: DifficultyRanking,
+    answer?: string[],
     milliseconds_spent: number
-    correct: boolean
+    correct: boolean,
+    question: Question
 }
 
 export type PublicUser = {

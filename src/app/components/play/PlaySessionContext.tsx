@@ -62,8 +62,8 @@ export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
         let score = 0;
         attemptedQuestions.forEach((question: QuestionAttemptData) => {
             if (!question.correct) return;
-            const base_score = QuestionTypePoints[question.type]
-            const multiplier = QuestionPointDifficultyMultipliers[question.difficulty]
+            const base_score = QuestionTypePoints[question.question.type]
+            const multiplier = QuestionPointDifficultyMultipliers[question.question.difficulty]
             const final = base_score * multiplier;
             score += final;
         })

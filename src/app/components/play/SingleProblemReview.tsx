@@ -1,124 +1,117 @@
 'use client';
 
-import { useState } from "react";
-import { Question } from "@/app/types";
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ChevronDown, ChevronUp, XCircle } from "lucide-react";
+import {useState} from "react";
+import {QuestionAttemptData} from "@/app/types";
+import {motion, AnimatePresence} from "framer-motion";
+import {CheckCircle, ChevronDown, ChevronUp, XCircle} from "lucide-react";
 
 type SingleProblemReviewProps = {
-  index: number;
-  problem: Question;
-  userAnswer: string | string[] | { x: number; y?: number };
-  isCorrect: boolean;
+    index: number;
+    attempt: QuestionAttemptData;
 };
 
-export default function SingleProblemReview({
-  index,
-  problem,
-  userAnswer,
-  isCorrect,
-}: SingleProblemReviewProps) {
-  const [open, setOpen] = useState(isCorrect === false);
-  const { question, solution, difficulty, type } = problem;
+export default function SingleProblemReview({index, attempt,}: SingleProblemReviewProps) {
+    const [open, setOpen] = useState(!attempt.correct);
+    const {question: {question, solution, difficulty, type}, answer, correct: isCorrect} = attempt;
 
-  const formatAnswer = (ans: any) => {
-    if (typeof ans === "string") return ans;
-    if (Array.isArray(ans)) return ans.join(", ");
-    if (typeof ans === "object") {
-      return `x: ${ans.x}${ans.y !== undefined ? `, y: ${ans.y}` : ""}`;
-    }
-    return JSON.stringify(ans);
-  };
+    const formatAnswer = (ans: any) => {
+        if (typeof ans === "string") return ans;
+        if (Array.isArray(ans)) return ans.join(", ");
+        if (typeof ans === "object") {
+            return `x: ${ans.x}${ans.y !== undefined ? `, y: ${ans.y}` : ""}`;
+        }
+        return JSON.stringify(ans);
+    };
 
-  const difficultyColors: Record<string, string> = {
-    easy: "bg-green-100 text-green-700",
-    medium: "bg-yellow-100 text-yellow-800",
-    hard: "bg-red-100 text-red-700",
-  };
+    const difficultyColors: Record<string, string> = {
+        easy: "bg-green-100 text-green-700",
+        medium: "bg-yellow-100 text-yellow-800",
+        hard: "bg-red-100 text-red-700",
+    };
 
-  return (
-    <motion.div
-      className="w-full rounded-2xl border p-6 shadow-md bg-white space-y-4"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center text-left"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-          <span className="text-lg font-semibold">Problem {index + 1}</span>
+    return (
+        <motion.div
+            className="w-full rounded-2xl border p-6 shadow-md bg-white space-y-4"
+            initial={{opacity: 0, y: 10}}
+            animate={{opacity: 1, y: 0}}
+            transition={{delay: index * 0.05}}
+        >
+            <button
+                onClick={() => setOpen(!open)}
+                className="w-full flex justify-between items-center text-left"
+            >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <span className="text-lg font-semibold">Problem {index + 1}</span>
 
-          <div className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center gap-2 text-sm">
             <span
-              className={`px-2 py-1 text-xs rounded-full font-medium capitalize ${
-                difficultyColors[difficulty.toLowerCase()] ||
-                "bg-gray-200 text-gray-700"
-              }`}
+                className={`px-2 py-1 text-xs rounded-full font-medium capitalize ${
+                    difficultyColors[difficulty.toLowerCase()] ||
+                    "bg-gray-200 text-gray-700"
+                }`}
             >
               {difficulty}
             </span>
 
-            {isCorrect ? (
-              <CheckCircle className="text-green-500 w-5 h-5" />
-            ) : (
-              <XCircle className="text-red-500 w-5 h-5" />
-            )}
-            <span
-              className={`font-medium ${
-                isCorrect ? "text-green-600" : "text-red-600"
-              }`}
-            >
+                        {isCorrect ? (
+                            <CheckCircle className="text-green-500 w-5 h-5"/>
+                        ) : (
+                            <XCircle className="text-red-500 w-5 h-5"/>
+                        )}
+                        <span
+                            className={`font-medium ${
+                                isCorrect ? "text-green-600" : "text-red-600"
+                            }`}
+                        >
               {isCorrect ? "Correct" : "Incorrect"}
             </span>
-          </div>
+                    </div>
 
-          <div className="text-sm">
-            <span className="font-medium">Your Answer: </span>
-            {formatAnswer(userAnswer)}
-          </div>
+                    <div className="text-sm">
+                        <span className="font-medium">Your Answer: </span>
+                        {formatAnswer(answer)}
+                    </div>
 
-          {!isCorrect && (
-            <div className="text-sm">
-              <span className="font-medium">Correct Answer: </span>
-              {formatAnswer(solution)}
-            </div>
-          )}
-        </div>
+                    {!isCorrect && (
+                        <div className="text-sm">
+                            <span className="font-medium">Correct Answer: </span>
+                            {formatAnswer(solution)}
+                        </div>
+                    )}
+                </div>
 
-        <div className="ml-2 shrink-0">
-          {open ? (
-            <ChevronUp className="w-5 h-5" />
-          ) : (
-            <ChevronDown className="w-5 h-5" />
-          )}
-        </div>
-      </button>
+                <div className="ml-2 shrink-0">
+                    {open ? (
+                        <ChevronUp className="w-5 h-5"/>
+                    ) : (
+                        <ChevronDown className="w-5 h-5"/>
+                    )}
+                </div>
+            </button>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="details"
-            initial={{ opacity: 0, maxHeight: 0, y: -6 }}
-            animate={{ opacity: 1, maxHeight: 500, y: 0 }}
-            exit={{ opacity: 0, maxHeight: 0, y: -6 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden mt-4 border-t pt-4 space-y-3"
-          >
-            <div className="text-base whitespace-pre-wrap">
-              {typeof question === "string" ? question : question.join("\n")}
-            </div>
+            <AnimatePresence initial={false}>
+                {open && (
+                    <motion.div
+                        key="details"
+                        initial={{opacity: 0, maxHeight: 0, y: -6}}
+                        animate={{opacity: 1, maxHeight: 500, y: 0}}
+                        exit={{opacity: 0, maxHeight: 0, y: -6}}
+                        transition={{duration: 0.3, ease: [0.4, 0, 0.2, 1]}}
+                        className="overflow-hidden mt-4 border-t pt-4 space-y-3"
+                    >
+                        <div className="text-base whitespace-pre-wrap">
+                            {typeof question === "string" ? question : question.join("\n")}
+                        </div>
 
-            <div className="text-sm">
-              <span className="font-medium">Solution: </span>
-              {formatAnswer(solution)}
-            </div>
+                        <div className="text-sm">
+                            <span className="font-medium">Solution: </span>
+                            {formatAnswer(solution)}
+                        </div>
 
-            <div className="text-sm text-gray-500 italic">Type: {type}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
+                        <div className="text-sm text-gray-500 italic">Type: {type}</div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
 }

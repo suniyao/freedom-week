@@ -24,7 +24,7 @@ export default async function SaveSession(params: SaveSessionParams) {
     })
 
     const formatted_questions = questions.map((q) => ({
-        type: q.type,
+        type: q.question.type,
         milliseconds_spent: q.milliseconds_spent,
         correct: q.correct,
         session_id: session.id
