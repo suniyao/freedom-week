@@ -13,6 +13,7 @@
     "@prisma/client": "^6.11.0",
     "@supabase/supabase-js": "^2.50.3",
     "bcryptjs": "^3.0.2",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.525.0",
     "mathjs": "^14.5.3",
