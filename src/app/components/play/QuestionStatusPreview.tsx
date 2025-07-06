@@ -18,7 +18,7 @@ export default function QuestionStatusPreview({
   status,
   currentQuestionIndex,
 }: QuestionStatusPreviewProps) {
-  const getStatusColor = (status: QuestionStatus) => {
+const getStatusColor = (status: QuestionStatus) => {
     if (status.answered) return "bg-black text-white";
     if (idx === currentQuestionIndex) return "ring-2 ring-amber-400 bg-amber-200 text-black";
     return "bg-white border border-black text-black";
