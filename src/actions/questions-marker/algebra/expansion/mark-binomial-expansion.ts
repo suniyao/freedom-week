@@ -8,13 +8,13 @@ export default function markBinomialExpansion(
   correct: boolean;
   inputStatus: Record<string, "correct" | "incorrect">;
 } {
-  const aUser = providedAnswer.a?.toString() ?? "";
-  const bUser = providedAnswer.b?.toString() ?? "";
-  const cUser = providedAnswer.c?.toString() ?? "";
+  const aUser = providedAnswer.A?.toString() ?? "";
+  const bUser = providedAnswer.B?.toString() ?? "";
+  const cUser = providedAnswer.C?.toString() ?? "";
 
-  const aSol = solution.a?.toString() ?? "";
-  const bSol = solution.b?.toString() ?? "";
-  const cSol = solution.c?.toString() ?? "";
+  const aSol = solution.A?.toString() ?? "";
+  const bSol = solution.B?.toString() ?? "";
+  const cSol = solution.C?.toString() ?? "";
 
   const aCorrect = expressionsAreEqual(
     normalizeMathExpression(aUser),
@@ -32,9 +32,9 @@ export default function markBinomialExpansion(
   return {
     correct: aCorrect && bCorrect && cCorrect,
     inputStatus: {
-      a: aCorrect ? "correct" : "incorrect",
-      b: bCorrect ? "correct" : "incorrect",
-      c: cCorrect ? "correct" : "incorrect",
+      A: aCorrect ? "correct" : "incorrect",
+      B: bCorrect ? "correct" : "incorrect",
+      C: cCorrect ? "correct" : "incorrect",
     },
   };
 }

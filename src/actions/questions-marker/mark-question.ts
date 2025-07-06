@@ -22,7 +22,8 @@ export default function markQuestion(
       return markQuadraticFactoring(providedAnswer, solution);
     case "quadratic-vertex":
       return markQuadraticVertex(providedAnswer, solution);
-    
+    case "linear-equation":
+      return markLinearEquation(providedAnswer, solution);
     default:
       // fallback: treat as single-answer check
       const normalizedAnswer = (providedAnswer[0]?.toString() || "");
