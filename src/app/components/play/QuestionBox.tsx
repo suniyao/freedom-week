@@ -50,7 +50,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
             setQuestionStatus(normalizedUser === normalizedSolution ? "correct" : "incorrect");
         }  else {
             // array solutions
-            const solutions = (solution).map(normalizeMathExpression).sort();
+            const solutions = (solution as string[]).map(normalizeMathExpression).sort();
             const answersArray = Object.values(answers).map(normalizeMathExpression).sort();
 
             const allMatch =
