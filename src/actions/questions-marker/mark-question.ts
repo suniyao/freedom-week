@@ -16,5 +16,7 @@ export default function markQuestion(type: string, answer: Record<string, string
             return markQuadraticFactoring(answer, solution)
         case "quadratic-vertex":
             return markQuadraticVertex(answer, solution)
+        default:
+            throw new Error(`Unknown question type ${type}`);
     }
 }

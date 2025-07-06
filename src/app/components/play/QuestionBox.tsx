@@ -5,32 +5,26 @@ import {BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
 import {useEffect, useState} from "react";
 import {ArrowRight} from "lucide-react";
-import normalizeMathExpression from "@/actions/reusable-utils/normalize-math-expression";
 import AnswerBox from "./AnswerBox";
+import markQuestion from "@/actions/questions-marker/mark-question";
 
 type QuestionBoxProps = {
     question: Question;
 }
 
-function isXYSolution(sol: unknown): sol is { x: string; y?: string } {
-    return typeof sol === "object" && sol !== null && "x" in sol;
-}
-
-function isABCSolution(sol: unknown): sol is Record<string, number> {
-  return typeof sol === "object" &&
-    sol !== null &&
-    !Array.isArray(sol) &&
-    Object.values(sol).every(v => typeof v === "number");
-}
-
-
 export default function QuestionBox(props: QuestionBoxProps) {
     const {question, solution, type} = props.question;
     const [inputStatus, setInputStatus] = useState<Record<string, "correct" | "incorrect" | "unanswered">>({});
-    const [answers, setAnswers] = useState<Record<number|string, string>>({})
+    const [answers, setAnswers] = useState<Record<string, string | number>>({})
     // const answers = useRef<Record<string | number, string>>({})
     const [questionStatus, setQuestionStatus] = useState<"unanswered" | "correct" | "incorrect">("unanswered");
     const checkAnswer = () => {
+        const correct = markQuestion(type, answers, solution);
+        if (correct) {
+            setQuestionStatus("correct")
+
+        } else setQuestionStatus("incorrect");
+        /*
         if (isXYSolution(solution)) {
             const normalizedX = normalizeMathExpression(answers.x ?? "");
             const normalizedSolutionX = normalizeMathExpression(solution.x.toString());
@@ -56,7 +50,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
             setQuestionStatus(normalizedUser === normalizedSolution ? "correct" : "incorrect");
         }  else {
             // array solutions
-            const solutions = (solution as string[]).map(normalizeMathExpression).sort();
+            const solutions = (solution).map(normalizeMathExpression).sort();
             const answersArray = Object.values(answers).map(normalizeMathExpression).sort();
 
             const allMatch =
@@ -65,6 +59,9 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
             setQuestionStatus(allMatch ? "correct" : "incorrect");
         }
+
+         */
+        //TODO: new checkAnswer function, maps types to markQuestion functions
     };
 
     const ringColor =
@@ -77,32 +74,17 @@ export default function QuestionBox(props: QuestionBoxProps) {
     useEffect(() => {
         const newAnswers: Record<string | number, string> = {};
         const newStatuses: Record<string, "correct" | "incorrect" | "unanswered"> = {};
-        if (typeof solution === "string") {
-            newAnswers["answer"] = "";
-            newStatuses["answer"] = "unanswered";
-        } else if ("x" in solution && "y" in solution) {
-            newAnswers["x"] = "";
-            newStatuses["x"] = "unanswered";
-            if (solution.y) {
-            newAnswers["y"] = "";
-            newStatuses["y"] = "unanswered";
-            }
-        } else if (isABCSolution(solution)) {
-            Object.keys(solution).forEach((key) => {
+
+        Object.keys(solution).forEach((key) => {
             newAnswers[key] = "";
             newStatuses[key] = "unanswered";
-            });
-        } else {
-            (solution).forEach((_, index) => {
-            newAnswers[index] = "";
-            newStatuses[index] = "unanswered";
-            });
-        }
+        });
         setAnswers(newAnswers);
         console.log(answers);
         console.log(solution);
         console.log(Object.keys(answers));
-    }, [props]);
+    }, [props]); //TODO: plug in a function that changes the question box component based on question type
+    //TODO: need helper function to map type to component
 
 
     return (
@@ -119,24 +101,24 @@ export default function QuestionBox(props: QuestionBoxProps) {
             <div className="flex flex-row gap-2">
                 <div className={"flex flex-col gap-2"}>
                     {["quadratic-vertex", "quadratic-factoring", "binomial-expansion", "linear-system"].includes(type) ? (
-                    <AnswerBox
-                        values={answers}
-                        onValuesChange={(newValues) => setAnswers(newValues)}
-                        questionType={type}
-                    />
-                    ) : (
-                    // fallback to individual inputs for simple types like 'linear-equation'
-                    Object.keys(answers).map((key) => (
-                        <div key={key} className="m-2 text-center">
-                        <label className="mx-3">{key}</label>
                         <AnswerBox
-                            values={{ [key]: answers[key] }}
-                            onValuesChange={(v) => setAnswers(prev => ({ ...prev, ...v }))}
+                            values={answers}
+                            onValuesChange={(newValues) => setAnswers(newValues)}
                             questionType={type}
-                            inputStatuses = {inputStatus}
                         />
-                        </div>
-                    ))
+                    ) : (
+                        // fallback to individual inputs for simple types like 'linear-equation'
+                        Object.keys(answers).map((key) => (
+                            <div key={key} className="m-2 text-center">
+                                <label className="mx-3">{key}</label>
+                                <AnswerBox
+                                    values={{[key]: answers[key]}}
+                                    onValuesChange={(v) => setAnswers(prev => ({...prev, ...v}))}
+                                    questionType={type}
+                                    inputStatuses={inputStatus}
+                                />
+                            </div>
+                        ))
                     )}
                 </div>
                 {questionStatus === "unanswered" ? (
@@ -150,6 +132,19 @@ export default function QuestionBox(props: QuestionBoxProps) {
                         <ArrowRight size={20}/>
                     </button>
                 )}
+                {
+                    questionStatus === "correct" && (
+                        <div>correct!!!</div>
+                    )
+                }
+                {
+                    questionStatus === "incorrect" && (
+                        <div>incorrect!!!
+                            {Object.entries(solution).map((val) => <div>{val[1]}</div>)}
+
+                        </div>
+                    )
+                }
             </div>
         </div>
     )
