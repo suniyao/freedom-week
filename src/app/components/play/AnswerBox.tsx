@@ -43,7 +43,9 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
       return (
         <div>
           <InlineMath>x = ~</InlineMath>
-          <input className={clsx(inputClass, getRingColor)} />
+          <input className={clsx(inputClass, getRingColor("x"))} 
+            value={values?.x ?? ""}
+            onChange={(e) => onValuesChange?.({ ...values, x: e.target.value })}/>
         </div>
       )
       
@@ -52,11 +54,15 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
         <div className="flex flex-row gap-2">
           <div>
             <InlineMath> x=~</InlineMath>
-            <input className={clsx(inputClass, getRingColor("x"))} />
+            <input className={clsx(inputClass, getRingColor("x"))} 
+              value={values?.x ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, x: e.target.value })}/>
           </div>
           <div>
             <InlineMath> y=~</InlineMath>
-            <input className={clsx(inputClass, getRingColor("y"))} />
+            <input className={clsx(inputClass, getRingColor("y"))} 
+              value={values?.y ?? ""}
+              onChange={(e) => onValuesChange?.({ ...values, y: e.target.value })}/>
           </div>
         </div>
       )
