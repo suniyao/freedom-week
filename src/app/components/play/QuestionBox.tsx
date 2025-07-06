@@ -121,29 +121,17 @@ export default function QuestionBox(props: QuestionBoxProps) {
                         inputStatuses={inputStatus}
                     />
                     ) : (
-                    // fallback to individual inputs for simple types like 'linear-equation'
                     Object.keys(answers).map((key) => (
                         <div key={key} className="m-2 text-center">
                         <label className="mx-3">{key}</label>
-
                         <AnswerBox
-                            values={answers}
-                            onValuesChange={(newValues) => setAnswers(newValues)}
+                            values={{ [key]: answers[key] }}
+                            onValuesChange={(v) => setAnswers(prev => ({ ...prev, ...v }))}
                             questionType={type}
+                            inputStatuses={inputStatus}
                         />
-                    ) : (
-                        // fallback to individual inputs for simple types like 'linear-equation'
-                        Object.keys(answers).map((key) => (
-                            <div key={key} className="m-2 text-center">
-                                <label className="mx-3">{key}</label>
-                                <AnswerBox
-                                    values={{[key]: answers[key]}}
-                                    onValuesChange={(v) => setAnswers(prev => ({...prev, ...v}))}
-                                    questionType={type}
-                                    inputStatuses={inputStatus}
-                                />
-                            </div>
-                        ))
+                        </div>
+                    ))
                     )}
                 </div>
                 {questionStatus === "unanswered" ? (
