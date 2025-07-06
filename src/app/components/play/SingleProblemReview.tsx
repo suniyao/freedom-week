@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronDown, ChevronUp, XCircle, AlarmClock} from "lucide-react";
 import { QuestionAttemptData } from "@/app/types";
 import Image from "next/image";
+import { formatAnswerByType, formatSolutionByType } from "@/actions/reusable-utils/format";
 
 type SingleProblemReviewProps = {
   index: number;
@@ -25,12 +26,10 @@ export default function SingleProblemReview({
   } = attempt;
 
   const formatAnswer = (ans: any) => {
-    if (typeof ans === "string") return ans;
-    if (Array.isArray(ans)) return ans.join(", ");
-    if (typeof ans === "object") {
-      return `x= ${ans.x}${ans.y !== undefined ? `, y= ${ans.y}` : ""}`;
-    }
-    return JSON.stringify(ans);
+      if (ans && !Array.isArray(ans)) {
+        return formatAnswerByType(type, ans);
+      }
+      else return formatAnswer(ans);
   };
 
   const difficultyColors: Record<string, string> = {
@@ -85,16 +84,9 @@ export default function SingleProblemReview({
 
           <div className="text-sm">
             <span className="font-medium">Your Answer: </span>
-            {formatAnswer(answer)}
-          </div>
-
-          {!isCorrect && (
-            <div className="text-sm">
-              <span className="font-medium">Correct Answer: </span>
-              {formatAnswer(solution)}
-            </div>
-          )}
-          
+            {formatAnswer(answer)} 
+            {/* formatAnswerByType not working somehow, can u fix it gabriel */}
+          </div>          
         </div>
 
         <div className="ml-2 shrink-0">
@@ -123,7 +115,7 @@ export default function SingleProblemReview({
 
               <div className="text-sm">
                 <span className="font-medium">Solution: </span>
-                {formatAnswer(solution)}
+                {formatSolutionByType(type, solution)}
               </div>
 
               <div className="text-sm text-gray-500 italic">Type: {type}</div>

@@ -9,6 +9,7 @@ export type ExpansionResult = {expression: string, solution: string}
 export interface Question {
     question: string[],
     solution: Record<string, number | string>,
+    displaySolution?: string;
     difficulty: DifficultyRanking,
     type: string,
 }
