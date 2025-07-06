@@ -28,7 +28,7 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const d = y - c * x;
 
         return {
-            question: [q_text, `\\begin{cases} y = ${a}x + ${b}\\\\ y = ${formatTerm(c, "x")} + ${d} \\end{cases}`],
+            question: [q_text, `\\begin{cases} y = ${a}x + ${b}\\\\ y = ${c}x + ${d} \\end{cases}`],
             solution: { x, y },
             difficulty,
             type: "linear-system"
