@@ -11,29 +11,27 @@ export default async function generateLinearEquationQuestion(difficulty: Difficu
         // form of ax + b = c, solve for x
         const a = RandomInt(0, 10)
         const b = RandomInt(-10, 10)
-        const c = RandomInt(-30, 30)
+        const x = RandomInt(-10, 10)
+        const c = a*x + b;
 
-        const x = (c - b)/a;
-
-        return {question: [q_text, `${a}x + ${b} = ${c}`], solution: {ans: x}, difficulty, type: "linear-equation"};
+        return {question: [q_text, `${a}x + ${b} = ${c}`], solution: {x}, difficulty, type: "linear-equation"};
     } else if (difficulty === "medium") {
         // form of ax + b = c, solve for x (a can be negative)
         const a = RandomInt(-10, 10)
+        const x = RandomInt(-10, 10)
         const b = RandomInt(-10, 10)
-        const c = RandomInt(-30, 30)
+        const c = a*x + b
 
-        const x = (c - b) / a;
-
-        return {question: [q_text, `${a}x ${formatTerm(b)} = ${c}`], solution:{ans: x}, difficulty, type: "linear-equation"}
+        return {question: [q_text, `${a}x ${formatTerm(b)} = ${c}`], solution:{x}, difficulty, type: "linear-equation"}
     } else {
         // form of ax + b = cx + d, solve for x
         const a = RandomInt(-10, 10, true)
         const b = RandomInt(-10, 10, true)
         const c = RandomInt(-10, 10, true)
-        const d = RandomInt(-30, 30, true)
+        const x = RandomInt(-30, 30, true)
 
-        const x = (a - c)/(d - b)
+        const d = (a-c)*x + b
 
-        return {question: [q_text, `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`], solution:{ans: x}, difficulty, type: "linear-equation"}
+        return {question: [q_text, `${a}x ${formatTerm(b)} = ${c}x ${formatTerm(d)}`], solution:{x}, difficulty, type: "linear-equation"}
     }
 }
