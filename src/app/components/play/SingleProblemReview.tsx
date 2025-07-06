@@ -6,6 +6,7 @@ import {CheckCircle, ChevronDown, ChevronUp, XCircle, AlarmClock} from "lucide-r
 import {QuestionAttemptData} from "@/app/types";
 import Image from "next/image";
 import formatTerm from "@/actions/reusable-utils/format-term";
+import {formatAnswerByType, formatSolutionByType} from "@/actions/reusable-utils/format";
 
 type SingleProblemReviewProps = {
     index: number;
@@ -32,7 +33,7 @@ export default function SingleProblemReview({
         if (typeof ans === "string") return ans;
         if (Array.isArray(ans)) return ans.join(", ");
         if (typeof ans === "object") {
-            if (ans.x){
+            if (ans.x) {
                 return `x= ${ans.x}${ans.y !== undefined ? `, y= ${ans.y}` : ""}`;
             } else if (ans.A && ans.B && ans.C) {
                 return `${ans.A}x^2 ${formatTerm(ans.B, "x")} ${formatTerm(ans.C)}`;
@@ -135,6 +136,10 @@ export default function SingleProblemReview({
                                 <span className="font-medium">Solution: </span>
                                 {formatAnswer(solution)}
                             </div>
+                            {/*<div className="text-sm">
+                                <span className="font-medium">Solution: </span>
+                                {formatSolutionByType(type, solution)}
+                            </div>*/}
 
                             <div className="text-sm text-gray-500 italic">Type: {type}</div>
                         </div>
