@@ -49,6 +49,11 @@ export default function QuestionBox(props: QuestionBoxProps) {
     }, [props]); //TODO: plug in a function that changes the question box component based on question type
     //TODO: need helper function to map type to component
 
+    useEffect(() => {
+        // clear answers and statuses when question changes
+        setAnswers({});
+        setInputStatus({});
+        }, [props]);
 
     return (
         <div

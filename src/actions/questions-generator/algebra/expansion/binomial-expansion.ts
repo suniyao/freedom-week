@@ -15,9 +15,14 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         b = RandomInt(-10, 10, true)
 
         const expression = `(x ${formatTerm(a)})(x ${formatTerm(b)})`;
-        const ans = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
+        // const ans = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
+        const solution = {
+            A: 1,
+            B: a+b,
+            C: a*b,
+        }
 
-        return {question: [q_text, expression], solution: {ans}, difficulty, type: "binomial-expansion"};
+        return {question: [q_text, expression], solution, difficulty, type: "binomial-expansion"};
     } else if (difficulty === "medium") {
         //(ax+b)(cx+d)
         let a,b,c,d
@@ -27,9 +32,14 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         d = RandomInt(-10, 10, true)
 
         const expression = `(${a}x ${formatTerm(b)})(${c}x ${formatTerm(d)})`;
-        const ans = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
+        // const ans = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
+        const solution = {
+            A: a*c,
+            B: b*c + d*a,
+            C: b*d,
+        }
 
-        return {question: [q_text, expression], solution:{ans}, difficulty, type: "binomial-expansion"};
+        return {question: [q_text, expression], solution, difficulty, type: "binomial-expansion"};
     } else {
         //a(bx+c)(dx+e) + f(gx+h)(ix+j)
         //this will be fun

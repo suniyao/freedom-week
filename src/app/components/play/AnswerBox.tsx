@@ -25,15 +25,15 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
     case 'binomial-expansion':
       return (
         <div>
-          <input className={inputClass + `${getRingColor("A")}`} 
+          <input className={clsx(inputClass, getRingColor("A"))} 
             value={values?.A ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, A: e.target.value })}/>
           <InlineMath> ~ x^2 + ~ </InlineMath>
-          <input className={inputClass + `${getRingColor("B")}`} 
+          <input className={clsx(inputClass, getRingColor("B"))} 
             value={values?.B ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, B: e.target.value })}/>
           <InlineMath>~ x  + ~</InlineMath>
-          <input className={inputClass + `${getRingColor("C")}`} 
+          <input className={clsx(inputClass, getRingColor("C"))} 
             value={values?.C ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, C: e.target.value })}/>
         </div>
