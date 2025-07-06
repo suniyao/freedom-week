@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function SetUp(props: {onStart: VoidFunction}) {
     //const [infinityMode, setInfinityMode] = useState(false);
     const playSession = usePlaySession();
-    const [questionCount, setQuestionCount] = useState<number>(10);
+    //const [questionCount, setQuestionCount] = useState<number>(10);
     const [error, setError] = useState<string>("");
 
     const handleStart = () => {
@@ -19,7 +19,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
 
       const atLeastOneType = selectedTypes && Object.values(selectedTypes).some((v) => v);
       const atLeastOneDiff = Object.values(selectedDiffs).some((v) => v);
-      const validQuestionCount = playSession.playMode === "infinity" || questionCount >= 1;
+      const validQuestionCount = playSession.playMode === "infinity" || playSession.numberOfQuestions >= 1;
 
       if (!atLeastOneDiff) {
         setError("Please select at least one difficulty level.");
@@ -34,9 +34,9 @@ export default function SetUp(props: {onStart: VoidFunction}) {
         return;
       }
 
-      if (validQuestionCount) {
-        playSession.setNumberOfQuestions(questionCount);
-      }
+      //if (validQuestionCount) {
+      //  playSession.setNumberOfQuestions(questionCount);
+      //}
       props.onStart();
     }
 
@@ -88,7 +88,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                         <h2 className="text-2xl font-semibold">How many questions?</h2>
                         <input
                           type="number"
-                          value={questionCount}
+                          value={playSession.numberOfQuestions}
                           placeholder="# of questions"
                           disabled={playSession.playMode === "infinity"}
                           min="1"
@@ -104,7 +104,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                           `}
                           onChange={(e) => {
                             const val = Math.max(1, Math.floor(Number(e.target.value)));
-                            setQuestionCount(isNaN(val) ? 1 : val);
+                            playSession.setNumberOfQuestions(isNaN(val) ? 1 : val);
                           }}
                         />
                         <div className="flex items-center gap-3 mt-2">

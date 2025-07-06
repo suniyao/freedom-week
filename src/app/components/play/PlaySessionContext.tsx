@@ -4,14 +4,15 @@ import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {Question, QuestionAttemptData} from "@/app/types";
 import {QuestionPointDifficultyMultipliers, QuestionTypePoints} from "@/consts/question-type-points";
 import generateManyQuestions from "@/actions/questions-generator/generate-many-questions";
+import SaveSession from "@/actions/database/save-session";
 
 export const PlaySessionContext = createContext<PlaySessionType | null>(null);
 
 export type PlaySessionType = {
-    startTime: Date | undefined,
-    setStartTime: (startTime: Date | undefined) => void;
-    endTime: Date | undefined,
-    setEndTime: (endTime: Date | undefined) => void,
+    startTime: number | undefined,
+    setStartTime: (startTime: number | undefined) => void;
+    endTime: number | undefined,
+    setEndTime: (endTime: number | undefined) => void,
     attemptedQuestions: QuestionAttemptData[],
     addAttemptedQuestion: (question: QuestionAttemptData) => void,
     owner_id: string,
@@ -32,12 +33,13 @@ export type PlaySessionType = {
     setDifficulties: (newDiff: {easy: boolean, medium: boolean, hard: boolean}) => void,
     numberOfQuestions: number,
     setNumberOfQuestions: (newNum: number) => void,
-    startLoading: () => void
+    startLoading: () => void,
+    endGame: () => void,
 }
 
-export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
-    const [startTime, setStartTime] = useState<Date>();
-    const [endTime, setEndTime] = useState<Date>();
+export const PlaySessionProvider = ({children, user_id}: {children: ReactNode, user_id: string}) => {
+    const [startTime, setStartTime] = useState<number>();
+    const [endTime, setEndTime] = useState<number>();
     const [attemptedQuestions, setAttemptedQuestions] = useState<QuestionAttemptData[]>([])
     const [questions, setQuestions] = useState<Question[]>([])
     const [owner_id, setOwnerId] = useState<string>("")
@@ -71,20 +73,30 @@ export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
     }
 
     const generateQuestions = async () => {
-        const num = numberOfQuestions ? numberOfQuestions : 10
+        //const num = numberOfQuestions ? numberOfQuestions : 10
         const newQuestions: Question[] = await generateManyQuestions(questionTypes, difficulties, numberOfQuestions)
         setQuestions(newQuestions)
     }
 
+    const [sessionSaved, setSessionSaved] = useState<boolean>(false)
+
+
+
+    const endGame = async () => {
+        setEndTime(Date.now());
+        setStatus("review")
+        await SaveSession({questions:attemptedQuestions, total_milliseconds_spent: Date.now() - (startTime as number), ranked, user_id})
+    }
+
     const startGame = () => {
-        setStartTime(new Date());
+        setStartTime(Date.now());
         setStatus("play");
     }
 
     const startLoading = () => setStatus("loadingStart")
 
     useEffect(() => {
-        setStartTime(new Date());
+        setStartTime(Date.now());
     }, []);
 
     return (
@@ -113,7 +125,8 @@ export const PlaySessionProvider = ({children}: {children: ReactNode}) => {
             setDifficulties,
             numberOfQuestions,
             setNumberOfQuestions,
-            startLoading
+            startLoading,
+            endGame
         }}>
             {children}
         </PlaySessionContext.Provider>

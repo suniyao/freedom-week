@@ -14,6 +14,9 @@ type QuestionBoxProps = {
 }
 
 export default function QuestionBox(props: QuestionBoxProps) {
+    if (!props.question) {console.log("no question");return null;}
+
+
     const {question, solution, type, difficulty} = props.question;
     const [inputStatus, setInputStatus] = useState<Record<string, "correct" | "incorrect" | "unanswered">>({});
     const [answers, setAnswers] = useState<Record<string, string | number>>({})

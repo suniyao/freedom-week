@@ -15,9 +15,11 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         b = RandomInt(-10, 10, true)
 
         const expression = `(x ${formatTerm(a)})(x ${formatTerm(b)})`;
-        const ans = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
+        //const ans = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
 
-        return {question: [q_text, expression], solution: {ans}, difficulty, type: "binomial-expansion"};
+
+
+        return {question: [q_text, expression], solution: {a: 1, b: a+b, c: a*b}, difficulty, type: "binomial-expansion"};
     } else if (difficulty === "medium") {
         //(ax+b)(cx+d)
         let a,b,c,d
@@ -27,9 +29,9 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         d = RandomInt(-10, 10, true)
 
         const expression = `(${a}x ${formatTerm(b)})(${c}x ${formatTerm(d)})`;
-        const ans = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
+        //const ans = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
 
-        return {question: [q_text, expression], solution:{ans}, difficulty, type: "binomial-expansion"};
+        return {question: [q_text, expression], solution:{a: a*c, b: (b*c+d*a), c: (b*d)}, difficulty, type: "binomial-expansion"};
     } else {
         //a(bx+c)(dx+e) + f(gx+h)(ix+j)
         //this will be fun
@@ -48,7 +50,7 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         j = RandomInt(-10, 10, true)
 
         const expression = `${a}(${b}x ${formatTerm(c)})(${d}x ${formatTerm(e)}) ${formatTerm(f)}(${g}x ${formatTerm(h)})(${i}x ${formatTerm(j)})`
-        const ans = `${(a * b * d) + (f * g * i)}x^2 ${formatTerm((a * (b*e + c*d)) + (f * (g*j + h*i)), "x")} ${formatTerm((a * c * e) + (f * h * j))}`
-        return {question: [q_text, expression], solution: {ans}, difficulty, type: "binomial-expansion"};
+        //const ans = `${(a * b * d) + (f * g * i)}x^2 ${formatTerm((a * (b*e + c*d)) + (f * (g*j + h*i)), "x")} ${formatTerm((a * c * e) + (f * h * j))}`
+        return {question: [q_text, expression], solution: {a: (a * b * d) + (f * g * i), b: (a * (b*e + c*d)) + (f * (g*j + h*i)), c: (a * c * e) + (f * h * j)}, difficulty, type: "binomial-expansion"};
     }
 }

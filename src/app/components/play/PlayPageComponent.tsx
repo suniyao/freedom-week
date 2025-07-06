@@ -6,8 +6,12 @@ import SetUp from '@/app/components/play/SetUp';
 import Review from '@/app/components/play/Review';
 import LoadingStart from "@/app/components/play/LoadingStart";
 import {usePlaySession} from "@/app/components/play/PlaySessionContext";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 export default function PlayPageComponent() {
+
+
     const playSession = usePlaySession();
 
     const commencerLeJeu = () => {
