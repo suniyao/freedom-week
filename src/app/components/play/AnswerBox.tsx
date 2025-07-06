@@ -1,5 +1,5 @@
 import { InlineMath } from "react-katex";
-
+import clsx from "clsx";
 // type QuestionType = 
 //   | 'binomial-expansion'
 //   | 'linear-equation'
@@ -42,8 +42,8 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
     case 'linear-equation':
       return (
         <div>
-          <InlineMath>x = </InlineMath>
-          <input className={inputClass} />
+          <InlineMath>x = ~</InlineMath>
+          <input className={clsx(inputClass, getRingColor)} />
         </div>
       )
       
@@ -51,12 +51,12 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
       return (
         <div className="flex flex-row gap-2">
           <div>
-            <InlineMath> x:~</InlineMath>
-            <input className={inputClass} />
+            <InlineMath> x=~</InlineMath>
+            <input className={clsx(inputClass, getRingColor("x"))} />
           </div>
           <div>
-            <InlineMath> y:~</InlineMath>
-            <input className={inputClass} />
+            <InlineMath> y=~</InlineMath>
+            <input className={clsx(inputClass, getRingColor("y"))} />
           </div>
         </div>
       )
@@ -80,12 +80,12 @@ export default function AnswerBox({ values, onValuesChange, questionType, inputS
       return (
         <div>
           <InlineMath>(~</InlineMath>
-          <input className={inputClass} 
+          <input className={clsx(inputClass, getRingColor("x"))} 
             value={values?.x ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, x: e.target.value })}
           />
           <InlineMath>~,~ </InlineMath>
-          <input className={inputClass}
+          <input className={clsx(inputClass, getRingColor("y"))} 
             value={values?.y ?? ""}
             onChange={(e) => onValuesChange?.({ ...values, y: e.target.value })}
           />

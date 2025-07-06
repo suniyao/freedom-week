@@ -43,17 +43,27 @@ export default function QuestionBox(props: QuestionBoxProps) {
             const xCorrect = normalizedX === normalizedSolutionX;
             const yCorrect = solution.y ? normalizedY === normalizedSolutionY : true;
 
+            const newStatuses: typeof inputStatus = {};
+            newStatuses.x = xCorrect ? "correct" : "incorrect";
+            if (solution.y) {
+                newStatuses.y = yCorrect ? "correct" : "incorrect";
+            }
+
+            setInputStatus(newStatuses);
+            setQuestionStatus(xCorrect && yCorrect ? "correct" : "incorrect");
+
             console.log(xCorrect);
             console.log(yCorrect);
             console.log(normalizedX)
             console.log(normalizedSolutionX)
 
-            setQuestionStatus(xCorrect && yCorrect ? "correct" : "incorrect");
         }  else if (typeof solution === "string") {
             const normalizedUser = normalizeMathExpression(answers[0] ?? "");
             const normalizedSolution = normalizeMathExpression(solution);
-
             setQuestionStatus(normalizedUser === normalizedSolution ? "correct" : "incorrect");
+            setInputStatus({
+                0: normalizedUser === normalizedSolution ? "correct" : "incorrect"
+            });
         }  else {
             // array solutions
             const solutions = (solution as string[]).map(normalizeMathExpression).sort();
@@ -66,13 +76,6 @@ export default function QuestionBox(props: QuestionBoxProps) {
             setQuestionStatus(allMatch ? "correct" : "incorrect");
         }
     };
-
-    const ringColor =
-        questionStatus === "correct"
-            ? "ring-2 ring-green-500"
-            : questionStatus === "incorrect"
-                ? "ring-2 ring-red-500"
-                : "";
 
     useEffect(() => {
         const newAnswers: Record<string | number, string> = {};
@@ -123,6 +126,7 @@ export default function QuestionBox(props: QuestionBoxProps) {
                         values={answers}
                         onValuesChange={(newValues) => setAnswers(newValues)}
                         questionType={type}
+                        inputStatuses={inputStatus}
                     />
                     ) : (
                     // fallback to individual inputs for simple types like 'linear-equation'

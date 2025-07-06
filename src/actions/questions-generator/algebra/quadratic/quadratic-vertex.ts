@@ -25,7 +25,7 @@ export default async function generateQuadraticVertexQuestion(difficulty: Diffic
         n = RandomInt(-10, 10, true)
 
         const equation = `${a}(x ${formatTerm(m)})(x ${formatTerm(n)})`
-        const vertexX = (m + n) / 2;
+        const vertexX = -(m + n) / 2;
         const vertexY = a * (vertexX - m) * (vertexX - n);
         return {question: [q_text, equation], solution: {x: vertexX, y: vertexY}, difficulty, type: "quadratic-vertex"};
     } else {
