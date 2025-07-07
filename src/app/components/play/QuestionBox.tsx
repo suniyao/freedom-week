@@ -47,6 +47,9 @@ export default function QuestionBox(props: QuestionBoxProps) {
         setAnswers(newAnswers);
         setStartTime(Date.now())
         setQuestionStatus("unanswered")
+        // console.log(answers);
+        // console.log(solution);
+        // console.log(Object.keys(answers));
     }, [props]); //TODO: plug in a function that changes the question box component based on question type
     //TODO: need helper function to map type to component
 
