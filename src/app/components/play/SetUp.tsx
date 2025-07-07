@@ -41,7 +41,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
     }
 
     return (
-        <div className="w-full min-h-screen flex flex-col bg-amber-100 text-stone-900 p-6 gap-8">
+        <div className="w-full min-h-screen flex flex-col bg-amber-100 text-stone-900 p-6 gap-8 justify-center">
             <h1 className="text-4xl font-bold text-center">Set Up Your Game</h1>
             <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto w-full">
                 {/* Left Panel - Problem Types */}

@@ -13,9 +13,9 @@ type SingleProblemReviewProps = {
 };
 
 export default function SingleProblemReview({
-                                                index,
-                                                attempt,
-                                            }: SingleProblemReviewProps) {
+    index,
+    attempt,
+}: SingleProblemReviewProps) {
     const [open, setOpen] = useState(!attempt.correct);
 
     const {
@@ -71,17 +71,17 @@ export default function SingleProblemReview({
               {difficulty}
             </span>
 
-                        {isCorrect ? (
-                            <CheckCircle className="text-green-500 w-5 h-5"/>
-                        ) : (
-                            <XCircle className="text-red-500 w-5 h-5"/>
-                        )}
+            {isCorrect ? (
+                <CheckCircle className="text-green-500 w-5 h-5"/>
+            ) : (
+                <XCircle className="text-red-500 w-5 h-5"/>
+            )}
 
-                        <span
-                            className={`font-medium ${
-                                isCorrect ? "text-green-600" : "text-red-600"
-                            }`}
-                        >
+            <span
+                className={`font-medium ${
+                    isCorrect ? "text-green-600" : "text-red-600"
+                }`}
+            >
               {isCorrect ? "Correct" : "Incorrect"}
             </span>
                     </div>
@@ -136,7 +136,7 @@ export default function SingleProblemReview({
                         </div>
                         <div>
                             <Image
-                                src={`/memes/${isCorrect ? "correct" : "incorrect"}/${Math.floor(Math.random() * 10) + 1}.jpg`}
+                                src={`/memes/${isCorrect ? "correct" : "incorrect"}/${Math.floor(Math.random() * 11) + 1}.jpg`}
                                 width={64} height={64}
                                 alt={`random cat meme for ${isCorrect ? "correct" : "incorrect"} question`}/>
                         </div>
