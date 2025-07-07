@@ -8,3 +8,5 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 };
+
+module.exports = nextConfig;
