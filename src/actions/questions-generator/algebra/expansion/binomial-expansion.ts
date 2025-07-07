@@ -1,10 +1,13 @@
 "use server";
 
-import {DifficultyRanking, ExpansionResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateBinomialExpansionQuestion(difficulty: DifficultyRanking): Promise<ExpansionResult> {
+const q_text = "Expand the following binomial."
+
+export default async function generateBinomialExpansionQuestion(difficulty: DifficultyRanking): Promise<Question> {
+
     if (difficulty === "easy") {
         //(x+a)(x+b)
         let a,b
@@ -12,9 +15,16 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         b = RandomInt(-10, 10, true)
 
         const expression = `(x ${formatTerm(a)})(x ${formatTerm(b)})`;
-        const solution = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
+        // const ans = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`;
+        const solution = {
+            A: 1,
+            B: a+b,
+            C: a*b,
+        }
 
-        return {expression, solution}
+        const displaySolution = `x^2 ${formatTerm(a+b, "x")} ${formatTerm(a*b)}`
+
+        return {question: [q_text, expression], solution, displaySolution, difficulty, type: "binomial-expansion"};
     } else if (difficulty === "medium") {
         //(ax+b)(cx+d)
         let a,b,c,d
@@ -23,10 +33,17 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         c = RandomInt(-5, 5, true)
         d = RandomInt(-10, 10, true)
 
-        const expression = `(${formatTerm(a, "x")} ${formatTerm(b)})(${formatTerm(c, "x")} ${formatTerm(d)})`;
-        const solution = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
+        const expression = `(${a}x ${formatTerm(b)})(${c}x ${formatTerm(d)})`;
+        // const ans = `${a*c}x^2 ${formatTerm(b*c + d*a)} ${formatTerm(b*d)}`
+        const solution = {
+            A: a*c,
+            B: b*c + d*a,
+            C: b*d,
+        }
 
-        return {expression, solution}
+        const displaySolution = `${a*c}x^2 ${formatTerm(b*c + d*a)}x ${formatTerm(b*d)}`
+
+        return {question: [q_text, expression], solution, displaySolution, difficulty, type: "binomial-expansion"};
     } else {
         //a(bx+c)(dx+e) + f(gx+h)(ix+j)
         //this will be fun
@@ -45,7 +62,13 @@ export default async function generateBinomialExpansionQuestion(difficulty: Diff
         j = RandomInt(-10, 10, true)
 
         const expression = `${a}(${b}x ${formatTerm(c)})(${d}x ${formatTerm(e)}) ${formatTerm(f)}(${g}x ${formatTerm(h)})(${i}x ${formatTerm(j)})`
-        const solution = `${(a * b * d) + (f * g * i)}x^2 ${formatTerm((a * (b*e + c*d)) + (f * (g*j + h*i)), "x")} ${formatTerm((a * c * e) + (f * h * j))}`
-        return {expression, solution}
+
+        const solution = {
+            A: a*b*d + f*g*i,
+            B: (a * (b*e + c*d)) + (f * (g*j + h*i)),
+            C: (a * c * e) + (f * h * j),
+        }
+        const displaySolution = `${(a * b * d) + (f * g * i)}x^2 ${formatTerm((a * (b*e + c*d)) + (f * (g*j + h*i)), "x")} ${formatTerm((a * c * e) + (f * h * j))}`
+        return {question: [q_text, expression], solution, displaySolution, difficulty, type: "binomial-expansion"};
     }
 }

@@ -1,10 +1,16 @@
 "use server";
 
-import {DifficultyRanking, SystemResult} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import RandomInt from "@/actions/reusable-utils/random-int";
 import formatTerm from "@/actions/reusable-utils/format-term";
 
-export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<SystemResult> {
+const q_text = "Solve for x and y in the following linear system."
+
+export default async function generateLinearSystemQuestion(difficulty: DifficultyRanking): Promise<Question> {
+    function isEasier(n: number) {
+        return n === -1 || n === 0 || n === 1;
+    }
+
     if (difficulty === "easy") {
         //format of:
         // y = ax + b
@@ -22,9 +28,10 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const d = y - c * x;
 
         return {
-            equation_1: `y = ${a}x + ${b}`,
-            equation_2: `y = ${formatTerm(c, "x")} + ${d}`,
-            solution: { x, y }
+            question: [q_text, `\\begin{cases} y = ${a}x + ${b}\\\\ y = ${c}x + ${d} \\end{cases}`],
+            solution: { x, y },
+            difficulty,
+            type: "linear-system"
         }
     } else if (difficulty === "medium") {
         //format of:
@@ -48,15 +55,18 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         const e = c * x + d * y;
 
         return {
-            equation_1: `${a}x + y = ${b}`,
-            equation_2: `${c}x ${formatTerm(d, "y")} = ${e}`,
-            solution: { x, y }
+            question: [q_text, `\\begin{cases} ${a}x + y = ${b}\\\\ ${c}x ${formatTerm(d, "y")} = ${e}\\end{cases}`],
+            solution: { x, y },
+            difficulty,
+            type: "linear-system"
         }
     } else {
         //format of:
         // ax + by = c
         // dx + ey = f
         //negatives allowed
+        const x = RandomInt(-10, 10, true);
+        const y = RandomInt(-10, 10);
 
         let det
         let a,b,d,e
@@ -66,11 +76,10 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
             d = RandomInt(-10, 10, true)
             e = RandomInt(-10, 10, true)
             det = (b * d) - (a * e)
-        } while (det === 0)
+        } while (det === 0 || isEasier(a) || isEasier(b) || isEasier(d) || isEasier(e))
 
-        let f,c
-        c = RandomInt(-30, 30);
-        f = RandomInt(-30, 30);
+        const c = a*x + b*y;
+        const f = d*x + e*y;
 
 
         // y = (c - ax)/b
@@ -80,20 +89,12 @@ export default async function generateLinearSystemQuestion(difficulty: Difficult
         // bdx - aex = fb - ce
         // (bd - ae)x = fb - ce
         // x = (fb - ce) / (bd - ae)
-        let x = (f * b - c * e) / (b * d - a * e);
-        let y
-
-        if (b === 0) {
-            // use second equation
-            y = (f - d * x) / e;
-        } else {
-            y = (c - a * x) / b;
-        }
 
         return {
-            equation_1: `${a}x ${formatTerm(b, "y")} = ${c}`,
-            equation_2: `${d}x ${formatTerm(e, "y")} = ${f}`,
-            solution: {x, y}
+            question: [q_text, `\\begin{cases} ${a}x ${formatTerm(b, "y")}= ${c}\\\\ ${d}x ${formatTerm(e, "y")}= ${f} \\end{cases}`],
+            solution: {x, y},
+            difficulty,
+            type: "linear-system"
         }
     }
 }
