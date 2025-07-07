@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
 export const UserContext = createContext<any>(null);
 
@@ -13,4 +13,4 @@ export const UserProvider = ({ children } : {children: React.ReactNode}) => {
   );
 };
 
-export const useUserData = () => useContext(UserContext);
+//export const useUserData = () => useContext(UserContext);
