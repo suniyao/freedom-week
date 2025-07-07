@@ -5,7 +5,7 @@ type ScoreProps = {
 export default function Score({ score }: ScoreProps) {
   return (
     <div className="text-lg text-amber-800">
-      Score: {score}
+      Score: {Math.floor(score * 100) / 100}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import {CheckCircle, ChevronDown, ChevronUp, XCircle, AlarmClock} from "lucide-r
 import {QuestionAttemptData} from "@/app/types";
 import Image from "next/image";
 import formatTerm from "@/actions/reusable-utils/format-term";
+import {BlockMath, InlineMath} from "react-katex";
 type SingleProblemReviewProps = {
     index: number;
     attempt: QuestionAttemptData;
@@ -121,12 +122,13 @@ export default function SingleProblemReview({
                     >
                         <div className="w-6/7">
                             <div className="text-base whitespace-pre-wrap">
-                                {typeof question === "string" ? question : question.join("\n")}
+                                {question[0]}
+                                <BlockMath>{question.slice(1).join("\n")}</BlockMath>
                             </div>
 
                             <div className="text-sm">
                                 <span className="font-medium">Solution: </span>
-                                {formatAnswer(solution, type)}
+                                <InlineMath>{formatAnswer(solution, type)}</InlineMath>
                             </div>
                             {/*<div className="text-sm">
                                 <span className="font-medium">Solution: </span>
