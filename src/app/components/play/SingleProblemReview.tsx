@@ -26,9 +26,6 @@ export default function SingleProblemReview({
     } = attempt;
 
     const formatAnswer = (ans: any, type:string) => {
-        console.log(answer)
-        console.log(ans)
-
         if (typeof ans === "string") return ans;
         if (Array.isArray(ans)) return ans.join(", ");
         if (typeof ans === "object") {

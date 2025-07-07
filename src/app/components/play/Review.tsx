@@ -2,6 +2,7 @@ import SingleProblemReview from "./SingleProblemReview";
 import {usePlaySession} from "@/app/components/play/PlaySessionContext";
 import {QuestionAttemptData} from "@/app/types";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 
 export default function Review() {
     const playSession = usePlaySession();
@@ -17,6 +18,7 @@ export default function Review() {
 
     const [questionTypes, setQuestionTypes] = useState<Record<string, { correct: number, incorrect: number }>>({});
 
+    const router = useRouter()
 
     useEffect(() => {
         const newQuestionTypes: Record<string, { correct: number, incorrect: number }> = {}
@@ -42,8 +44,18 @@ export default function Review() {
 
     return (
         <div className="min-h-screen w-full bg-amber-50 text-stone-900 py-16 px-4 sm:px-8">
-            <div className="mx-auto space-y-6">
+            <div className="mx-auto space-y-6 flex flex-col items-center">
                 <h1 className="text-3xl font-bold text-center mb-8">Review</h1>
+                <div className={"flex-row m-2 gap-3"}>
+                    <button onClick={() => window.location.reload()}
+                            className={"m-3 p-4 text-xl bg-green-400 rounded-xl shadow-2xs shadow-black justify-self-center"}>Play
+                        again
+                    </button>
+                    <button onClick={() => router.push("/")}
+                            className={"m-3 p-4 text-xl bg-green-400 rounded-xl shadow-2xs shadow-black justify-self-center"}>
+                        Return to home
+                    </button>
+                </div>
                 <div className={"flex flex-row gap-10 w-3/4 justify-center justify-self-center"}>
                     <div className="flex flex-col gap-6 p-3 bg-amber-300 rounded-xl w-1/2">
                         {playSession.attemptedQuestions.map(
@@ -57,6 +69,10 @@ export default function Review() {
                         )}
                     </div>
                     <div className={"flex flex-col gap-6 p-3 bg-amber-300 rounded-xl w-1/2"}>
+                        <div className={"m-1 bg-amber-50 p-3 rounded-xl text-center items-center"}>
+                            <span className={"text-xl"}>Score:</span>
+                            <span className={"text-3xl"}> {playSession.calculateScore()}</span>
+                        </div>
                         <div className={"m-2 bg-amber-50 p-3 rounded-xl"}>Percentage correct: <span
                             className={"text-xl text-red-500"}>{correct_percentage}%</span></div>
                         <div className={"m-2 bg-amber-50 p-3 rounded-xl"}>Time spent: <span

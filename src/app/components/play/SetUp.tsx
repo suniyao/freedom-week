@@ -107,7 +107,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                             playSession.setNumberOfQuestions(isNaN(val) ? 1 : val);
                           }}
                         />
-                        <div className="flex items-center gap-3 mt-2">
+                        {/*<div className="flex items-center gap-3 mt-2">
                             <input
                                 type="checkbox"
                                 id="infinityMode"
@@ -117,7 +117,7 @@ export default function SetUp(props: {onStart: VoidFunction}) {
                             <label htmlFor="infinityMode" className="text-lg">
                                 Infinity Mode
                             </label>
-                        </div>
+                        </div>*/}
                     </div>
                     
                     {error && (

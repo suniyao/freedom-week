@@ -1,20 +1,18 @@
 'use client'
 
-import { useState } from "react";
 import Image from "next/image"; // in case you wanna use real pfp imgs
 
 type Props = {
-  userId: string;
+  username: string,
+  profile_picture_url: string | null | undefined,
+  score: number,
   index?: number;
   highlight?: boolean;
 };
 
 
-export default function RankEntry({ userId, index, highlight }: Props) {
-  // TODO: fetch user info from DB using userId
-  const [username, setUsername] = useState("unknown");
-  const [pfp, setPfp] = useState("null");
-  const [score, setScore] = useState(1337);
+export default function RankEntry({ username, profile_picture_url, score, index, highlight }: Props) {
+  console.log(score)
 
   return (
     <div className="flex justify-center py-2">
@@ -22,16 +20,22 @@ export default function RankEntry({ userId, index, highlight }: Props) {
          <div className="text-lg font-bold w-10">{index}</div>
         {/* Profile Picture or Placeholder */}
         <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gray-300 text-center text-sm font-medium text-white flex items-center justify-center">
-          {pfp !== "null" ? (
+          {profile_picture_url && profile_picture_url !== "null" ? (
             <Image
-              src={pfp}
+              src={profile_picture_url}
               alt="Profile"
               width={48}
               height={48}
               className="rounded-full"
             />
           ) : (
-            username[0]?.toUpperCase() || "?"
+              <Image
+                  src={"/assets/default-pfp.png"}
+                  alt="Profile"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+              />
           )}
         </div>
 

@@ -35,12 +35,16 @@ export default async function SaveSession(params: SaveSessionParams) {
         }
     })
 
+
     const formatted_questions = questions.map((q) => ({
         type: q.question.type,
         milliseconds_spent: q.milliseconds_spent,
         correct: q.correct,
-        session_id: session.id
+        session_id: session.id,
+        score: q.score,
     }))
+
+    formatted_questions.forEach((q) => console.log(q.score))
 
     await prisma.questionData.createMany({
         data: formatted_questions
