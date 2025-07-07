@@ -1,7 +1,7 @@
 "use client";
 
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {Question, QuestionAttemptData} from "@/app/types";
+import {DifficultyRanking, Question, QuestionAttemptData} from "@/app/types";
 import {QuestionPointDifficultyMultipliers, QuestionTypePoints} from "@/consts/question-type-points";
 import generateManyQuestions from "@/actions/questions-generator/generate-many-questions";
 import SaveSession from "@/actions/database/save-session";

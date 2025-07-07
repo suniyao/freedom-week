@@ -39,7 +39,8 @@ export default async function SaveSession(params: SaveSessionParams) {
         type: q.question.type,
         milliseconds_spent: q.milliseconds_spent,
         correct: q.correct,
-        session_id: session.id
+        session_id: session.id,
+        score: q.score,
     }))
 
     await prisma.questionData.createMany({

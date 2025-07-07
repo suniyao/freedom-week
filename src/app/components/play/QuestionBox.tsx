@@ -1,6 +1,6 @@
 "use client";
 
-import {Question} from "@/app/types";
+import {DifficultyRanking, Question} from "@/app/types";
 import {BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
 import {useEffect, useState} from "react";
@@ -8,6 +8,7 @@ import {ArrowRight} from "lucide-react";
 import AnswerBox from "./AnswerBox";
 import markQuestion from "@/actions/questions-marker/mark-question";
 import {usePlaySession} from "@/app/components/play/PlaySessionContext";
+import {QuestionPointDifficultyMultipliers, QuestionTypePoints} from "@/consts/question-type-points";
 
 type QuestionBoxProps = {
     question: Question;
@@ -96,10 +97,13 @@ export default function QuestionBox(props: QuestionBoxProps) {
                     <button
                         className="p-2 bg-black text-amber-100 rounded-lg hover:text-black hover:bg-amber-100 transition-all"
                         onClick={() => {
+                            const score = calculateIndividualScore(props.question.type, props.question.difficulty, questionStatus === "correct" && true)
+
                             const attemptedQuestion = {
                                 question: props.question,
                                 correct: questionStatus === "correct" && true,
                                 milliseconds_spent: endTime - startTime,
+                                score,
                                 answer: answers,
                             }
                             playSession.addAttemptedQuestion(attemptedQuestion)
@@ -111,6 +115,13 @@ export default function QuestionBox(props: QuestionBoxProps) {
             </div>
         </div>
     )
+}
+
+const calculateIndividualScore = (type: string, difficulty: DifficultyRanking, correct: boolean,) => {
+    if (!correct) return 0;
+    const base_score = QuestionTypePoints[type]
+    const multiplier = QuestionPointDifficultyMultipliers[difficulty]
+    return base_score * multiplier;
 }
 //remember me, no matter what this result means 
 // BRUH WHAT?

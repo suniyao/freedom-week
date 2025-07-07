@@ -29,6 +29,7 @@ export interface QuestionAttemptData {
     answer: Record<string, string|number>,
     milliseconds_spent: number
     correct: boolean,
+    score: number,
     question: Question
 }
 
