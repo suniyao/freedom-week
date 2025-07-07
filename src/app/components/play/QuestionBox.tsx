@@ -15,6 +15,8 @@ type QuestionBoxProps = {
 }
 
 export default function QuestionBox(props: QuestionBoxProps) {
+    if (!props.question) {console.log("no question");return null;}
+
 
     const {question, solution, type, difficulty} = props.question;
     const [inputStatus, setInputStatus] = useState<Record<string, "correct" | "incorrect" | "unanswered">>({});
@@ -29,15 +31,12 @@ export default function QuestionBox(props: QuestionBoxProps) {
 
     const checkAnswer = () => {
         setEndTime(Date.now())
-        const {correct, inputStatus} = markQuestion(type, answers, solution);
+        const { correct, inputStatus } = markQuestion(type, answers, solution);
         setInputStatus(inputStatus);
         setQuestionStatus(correct ? "correct" : "incorrect");
     }
 
     useEffect(() => {
-        setAnswers({});
-        setInputStatus({});
-
         const newAnswers: Record<string | number, string> = {};
         const newStatuses: Record<string, "correct" | "incorrect" | "unanswered"> = {};
 
@@ -51,10 +50,11 @@ export default function QuestionBox(props: QuestionBoxProps) {
     }, [props]); //TODO: plug in a function that changes the question box component based on question type
     //TODO: need helper function to map type to component
 
-    if (!props.question) {
-        console.log("no question");
-        return null;
-    }
+    useEffect(() => {
+        // clear answers and statuses when question changes
+        setAnswers({});
+        setInputStatus({});
+        }, [props]);
 
     return (
         <div
@@ -70,24 +70,24 @@ export default function QuestionBox(props: QuestionBoxProps) {
             <div className="flex flex-row gap-2">
                 <div className={"flex flex-col gap-2"}>
                     {["quadratic-vertex", "quadratic-factoring", "binomial-expansion", "linear-system", "linear-equation"].includes(type) ? (
+                    <AnswerBox
+                        values={answers}
+                        onValuesChange={(newValues) => setAnswers(newValues)}
+                        questionType={type}
+                        inputStatuses={inputStatus}
+                    />
+                    ) : (
+                    Object.keys(answers).map((key) => (
+                        <div key={key} className="m-2 text-center">
+                        {/* <label className="mx-3">{key}</label> */}
                         <AnswerBox
-                            values={answers}
-                            onValuesChange={(newValues) => setAnswers(newValues)}
+                            values={{ [key]: answers[key] }}
+                            onValuesChange={(v) => setAnswers(prev => ({ ...prev, ...v }))}
                             questionType={type}
                             inputStatuses={inputStatus}
                         />
-                    ) : (
-                        Object.keys(answers).map((key) => (
-                            <div key={key} className="m-2 text-center">
-                                {/* <label className="mx-3">{key}</label> */}
-                                <AnswerBox
-                                    values={{[key]: answers[key]}}
-                                    onValuesChange={(v) => setAnswers(prev => ({...prev, ...v}))}
-                                    questionType={type}
-                                    inputStatuses={inputStatus}
-                                />
-                            </div>
-                        ))
+                        </div>
+                    ))
                     )}
                 </div>
                 {questionStatus === "unanswered" ? (
