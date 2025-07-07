@@ -33,7 +33,7 @@ const problemTree: Item[] = [
                         ],
                     },
                 ],
-            },
+            },/*
             {
                 label: 'Geometry',
                 children: [
@@ -64,7 +64,7 @@ const problemTree: Item[] = [
                     {label: 'GCD and LCM'},
                     {label: 'Divisibility Rules'},
                 ],
-            },
+            },*/
         ],
     },
 ];

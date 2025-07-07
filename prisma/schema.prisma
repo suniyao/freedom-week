@@ -44,6 +44,6 @@ model QuestionData {
   type               String
   milliseconds_spent Int
   correct            Boolean
-  score              Int
+  score              Decimal
   session            Session @relation(fields: [session_id], references: [id])
 }
