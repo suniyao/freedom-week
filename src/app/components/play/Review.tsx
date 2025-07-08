@@ -145,6 +145,16 @@ export default function Review() {
             )
           )}
         </div>
+        <div className={"flex flex-row gap-3"}>
+          <button onClick={() => window.location.reload()}
+            className={"p-4 text-xl bg-amber-300 hover:bg-black hover:text-amber-100 transition-all rounded-xl shadow-lg justify-self-center"}>Play
+            again
+          </button>
+          <button onClick={() => router.push("/")}
+            className={"p-4 text-xl bg-amber-300 hover:bg-black hover:text-amber-100 transition-all rounded-xl shadow-lg justify-self-center"}>
+            Return to home
+          </button>
+        </div>
       </div>
     </div>
   );
